@@ -1,0 +1,16 @@
+service: privacy
+
+provider:
+  name: aws
+  runtime: python3.8
+  memory: 128
+  timeout: 1
+  stage: prod
+
+functions:
+  privacy-policy:
+    handler: handler.privacy_policy
+    events:
+      - http:
+          path: privacy
+          method: get
