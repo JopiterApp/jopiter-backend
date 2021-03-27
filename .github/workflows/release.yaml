@@ -1,0 +1,28 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check
+        run: ./gradlew check
+      - name: Apply restaurants terraform
+        run: ./gradlew restaurants.apply
+      - name: Create ShadowJar
+        run: ./gradlew shadowJar
+      - name: Deploy to Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v16
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: jopiter backend
+        environment_name: JopiterBackend-env
+        version_label: ${{ env.GITHUB_RUN_NUMBER }}
+        region: us-east-1
+        deployment_package: build/libs/jopiter-backend-all.jar

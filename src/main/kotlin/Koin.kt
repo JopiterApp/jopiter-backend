@@ -16,14 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        maven ("https://dl.bintray.com/kotlin/kotlin-eap")
-    }
+package app.jopiter
+
+import app.jopiter.privacy.privacyModule
+import app.jopiter.restaurants.restaurantsModule
+import org.koin.core.context.startKoin
+import org.koin.dsl.module
+
+val root = module {
+    single { Router(get(), get()) }
 }
 
-rootProject.name = "jopiter-backend"
+val modules = listOf(root, privacyModule, restaurantsModule)
 
-include("privacy", "restaurants")
+val koinApp = startKoin { modules(modules) }

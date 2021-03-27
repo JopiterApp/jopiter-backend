@@ -1,0 +1,11 @@
+name: PR Builder
+on: push
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check
+        run: ./gradlew check
