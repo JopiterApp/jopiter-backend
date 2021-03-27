@@ -16,14 +16,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        maven ("https://dl.bintray.com/kotlin/kotlin-eap")
-    }
-}
+package app.jopiter.restaurants.model
 
-rootProject.name = "jopiter-backend"
+import java.time.LocalDate
 
-include("privacy", "restaurants")
+data class RestaurantItem(
+    val restaurantId: Int,
+    val date: LocalDate,
+    val period: Period,
+    val calories: Long?,
+    val mainItem: String?,
+    val vegetarianItem: String?,
+    val dessertItem: String?,
+    val mundaneItems: List<String>,
+    val unparsedMenu: String,
+    val restaurantName: String = Restaurant.getById(restaurantId).name
+)
+
+enum class Period { Lunch, Dinner }

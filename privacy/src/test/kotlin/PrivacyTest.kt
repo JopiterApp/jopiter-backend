@@ -1,6 +1,6 @@
 /*
- * Jopiter App
- * Copyright (C) 2020 Leonardo Colman Lopes
+ * Jopiter APP
+ * Copyright (C) 2021 Leonardo Colman Lopes
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -16,21 +16,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package app.jopiter
+package app.jopiter.privacy
 
+import app.jopiter.jopiter
+import com.github.kittinunf.fuel.httpGet
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.string.shouldContain
-import io.ktor.http.HttpMethod.Companion.Get
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.withTestApplication
 
-class StaticResourcesTests : ShouldSpec({
-   context("/privacy") {
-       should("return the privacy file") {
-           withTestApplication {
-               Server().prepare(this.application)
-               handleRequest(Get, "/privacy").response.content shouldContain "Privacy Policy"
-           }
-       }
-   }
+class PrivacyTest : ShouldSpec({
+    val app = jopiter().start(0)
+
+    should("Return the privacy file from the right path") {
+        "http://localhost:${app.port()}/privacy".httpGet().responseString().third.get() shouldContain "Leonardo Colman Lopes built the Jopiter app"
+    }
 })

@@ -1,0 +1,16 @@
+name: PR Builder
+on: push
+
+jobs:
+  check:
+    env:
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      USP_RESTAURANT_HASH: 596df9effde6f877717b4e81fdb2ca9f
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check
+        run: ./gradlew check

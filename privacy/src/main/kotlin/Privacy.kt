@@ -16,14 +16,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-pluginManagement {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-        maven ("https://dl.bintray.com/kotlin/kotlin-eap")
-    }
+package app.jopiter.privacy
+
+import io.javalin.http.Context
+import io.javalin.plugin.openapi.annotations.OpenApi
+import io.javalin.plugin.openapi.annotations.OpenApiResponse
+import org.koin.dsl.module
+
+val privacyModule = module {
+    single { PrivacyController() }
 }
 
-rootProject.name = "jopiter-backend"
+class PrivacyController {
+    private val privacyHtml = PrivacyController::class.java.classLoader.getResource("privacy.html")!!.readText()
 
-include("privacy", "restaurants")
+    @OpenApi(
+        summary = "Privacy Policy",
+        description = "Jopiter App privacy policy",
+        tags = ["privacy"],
+        responses = [
+            OpenApiResponse(status = "200", description = "Returns the privacy policy file")
+        ]
+    )
+    fun get(context: Context) {
+        context.html(privacyHtml)
+    }
+}
