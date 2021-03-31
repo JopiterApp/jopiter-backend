@@ -63,6 +63,8 @@ class Router(
 ) {
     fun register(app: Javalin) {
         app.routes {
+            get("/health") { it.result("OK") }
+
             path("/privacy") {
                 get(privacyController::get)
             }
