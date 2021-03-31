@@ -25,7 +25,8 @@ import java.util.concurrent.TimeUnit.MINUTES
 
 class RestaurantJob(
     scheduledExecutor: ScheduledExecutorService,
-    private val repository: RestaurantItemRepository
+    private val repository: RestaurantItemRepository,
+    private val knownRestaurants: Collection<Int>
 ) : Runnable {
 
     init {
@@ -33,8 +34,6 @@ class RestaurantJob(
     }
 
     override fun run() {
-        repeat(30) {
-            repository.get(it, setOf(now()))
-        }
+        knownRestaurants.forEach { repository.get(it, setOf(now())) }
     }
 }

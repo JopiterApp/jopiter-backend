@@ -31,5 +31,5 @@ val restaurantsModule = module {
     single { RestaurantItemRepository(get(), get()) }
     single { USPRestaurantItemRepository("https://uspdigital.usp.br/rucard/servicos", parsers, "596df9effde6f877717b4e81fdb2ca9f") }
     single { DynamoRestaurantItemRepository(DynamoDbEnhancedClient.create()) }
-    single(createdAtStart = true) { RestaurantJob(newSingleThreadScheduledExecutor(), get()) }
+    single(createdAtStart = true) { RestaurantJob(newSingleThreadScheduledExecutor(), get(), parsers.keys) }
 }

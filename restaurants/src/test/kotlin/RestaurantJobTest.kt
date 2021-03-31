@@ -19,10 +19,14 @@
 package app.jopiter.restaurants
 
 import app.jopiter.restaurants.repository.RestaurantItemRepository
+import app.jopiter.restaurants.repository.usp.MenuParser
 import io.kotest.core.spec.style.ShouldSpec
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyAll
+import io.mockk.verifySequence
 import java.time.LocalDate
+import java.time.LocalDate.now
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
@@ -30,19 +34,22 @@ class RestaurantJobTest : ShouldSpec({
 
     val repository = mockk<RestaurantItemRepository>(relaxed = true)
     val scheduledExecutor = mockk<ScheduledExecutorService>(relaxed = true)
+    val knownRestaurants = setOf(6, 7, 8)
 
     should("Program a job to run every 5 minutes on init") {
-        val target = RestaurantJob(scheduledExecutor, repository)
+        val target = RestaurantJob(scheduledExecutor, repository, knownRestaurants)
 
         verify(exactly = 1) { scheduledExecutor.scheduleWithFixedDelay(target, 0, 5, TimeUnit.MINUTES) }
     }
 
-    should("Attempt to get every restaurant menu for the current day") {
-        val target = RestaurantJob(scheduledExecutor, repository)
+    should("Attempt to get every parseable restaurant menu for the current day") {
+        val target = RestaurantJob(scheduledExecutor, repository, knownRestaurants)
         target.run()
 
-        repeat(30) {
-            verify(exactly = 1) { repository.get(it, setOf(LocalDate.now())) }
+        verifyAll {
+            repository.get(6, setOf(now()))
+            repository.get(7, setOf(now()))
+            repository.get(8, setOf(now()))
         }
     }
 })
