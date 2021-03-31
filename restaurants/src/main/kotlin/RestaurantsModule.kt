@@ -24,10 +24,12 @@ import app.jopiter.restaurants.repository.usp.USPRestaurantItemRepository
 import app.jopiter.restaurants.repository.usp.parsers
 import org.koin.dsl.module
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
+import java.util.concurrent.Executors.newSingleThreadScheduledExecutor
 
 val restaurantsModule = module {
     single { RestaurantController(get()) }
     single { RestaurantItemRepository(get(), get()) }
     single { USPRestaurantItemRepository("https://uspdigital.usp.br/rucard/servicos", parsers, "596df9effde6f877717b4e81fdb2ca9f") }
     single { DynamoRestaurantItemRepository(DynamoDbEnhancedClient.create()) }
+    single(createdAtStart = true) { RestaurantJob(newSingleThreadScheduledExecutor(), get()) }
 }

@@ -32,7 +32,7 @@ import java.time.LocalDate.parse
 class RestaurantController(
     private val restaurantItemRepository: RestaurantItemRepository
 ) {
-    
+
     @OpenApi(
         summary = "List all restaurants and their campi",
         description = "List all restaurants that are available, including to which campus it belongs",
@@ -44,7 +44,7 @@ class RestaurantController(
     fun list(context: Context) {
         context.json(Campus.values())
     }
-    
+
     @OpenApi(
         summary = "List Items",
         description = "Retrieves all items for the chosen dates and restaurant",
@@ -67,8 +67,7 @@ class RestaurantController(
         ],
 
         responses = [
-            OpenApiResponse("200", [OpenApiContent(RestaurantItem::class, isArray = true)]),
-            OpenApiResponse("400", [OpenApiContent(Int::class, isArray = true)], "Restaurant not found")
+            OpenApiResponse("200", [OpenApiContent(RestaurantItem::class, isArray = true)])
         ]
     )
     fun items(ctx: Context) {
