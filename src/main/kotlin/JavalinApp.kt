@@ -20,12 +20,14 @@ package app.jopiter
 
 import app.jopiter.privacy.PrivacyController
 import app.jopiter.restaurants.RestaurantController
+import app.jopiter.timetable.TimetableController
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.get
 import io.javalin.apibuilder.ApiBuilder.path
+import io.javalin.apibuilder.ApiBuilder.post
 import io.javalin.core.JavalinConfig
 import io.javalin.plugin.json.JavalinJackson
 import io.javalin.plugin.openapi.OpenApiOptions
@@ -59,7 +61,8 @@ private fun JavalinConfig.registerOpenApi() {
 
 class Router(
     private val privacyController: PrivacyController,
-    private val restaurantController: RestaurantController
+    private val restaurantController: RestaurantController,
+    private val timetableController: TimetableController
 ) {
     fun register(app: Javalin) {
         app.routes {
@@ -72,6 +75,10 @@ class Router(
                 path("/restaurants") {
                     get(restaurantController::list)
                     get("/items", restaurantController::items)
+                }
+
+                path("/timetable") {
+                    post(timetableController::timetable)
                 }
             }
         }

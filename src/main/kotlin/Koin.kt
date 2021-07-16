@@ -24,7 +24,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 val root = module {
-    single { Router(get(), get()) }
+    single { Router(get(), get(), get()) }
 }
 
 val modules = listOf(root, privacyModule, restaurantsModule)

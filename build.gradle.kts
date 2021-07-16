@@ -81,7 +81,9 @@ allprojects {
         testImplementation("io.mockk:mockk:1.11.0")
 
         // Mock Server
-        testImplementation("org.mock-server:mockserver-netty:5.11.2")
+        testImplementation("org.mock-server:mockserver-netty:5.11.2") {
+            exclude("com.google.guava")
+        }
 
         // Root project
         testImplementation(rootProject)
@@ -108,4 +110,5 @@ allprojects {
 dependencies {
     implementation(project(":privacy"))
     implementation(project(":restaurants"))
+    implementation(project(":timetable"))
 }
