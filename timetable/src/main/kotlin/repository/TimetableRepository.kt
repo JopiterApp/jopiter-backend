@@ -29,6 +29,7 @@ import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated
 import org.openqa.selenium.support.ui.Select
 import org.openqa.selenium.support.ui.WebDriverWait
+import org.springframework.stereotype.Repository
 import java.io.File.createTempFile
 import java.time.DayOfWeek
 import java.time.DayOfWeek.FRIDAY
@@ -44,6 +45,7 @@ import java.time.LocalTime.parse
 
 private const val JupiterLoginUrl = "https://uspdigital.usp.br/jupiterweb/webLogin.jsp"
 
+@Repository
 class TimetableRepository(
     private val subjectNameRepository: SubjectNameRepository
 ) {
@@ -88,24 +90,34 @@ class TimetableRepository(
 
     private fun <T> FirefoxDriver.waiting(block: () -> T?) = WebDriverWait(this, 10).until { block() }!!
 
-    inner class TimetableRow(val start: String, val end: String, val mon: String, val tue: String, val wed: String, val thu: String, val fri: String, val sat: String) {
+    @Suppress("LongParameterList")
+    inner class TimetableRow(
+        val start: String,
+        val end: String,
+        val mon: String,
+        val tue: String,
+        val wed: String,
+        val thu: String,
+        val fri: String,
+        val sat: String,
+    ) {
         constructor(trs: List<String>) : this(trs[0], trs[1], trs[2], trs[3], trs[4], trs[5], trs[6], trs[7])
 
         fun asSubjects(): List<Subject> {
             val subjects = mutableListOf<Subject>()
             val time = if(start.isBlank() || end.isBlank()) MIN..MAX else parse(start)..parse(end)
 
-            if(mon.isNotBlank()) subjects += Subject(MONDAY, mon.subjectCode, subjectNameRepository[mon.subjectCode], time)
-            if(tue.isNotBlank()) subjects += Subject(TUESDAY, tue.subjectCode, subjectNameRepository[tue.subjectCode], time)
-            if(wed.isNotBlank()) subjects += Subject(WEDNESDAY, wed.subjectCode, subjectNameRepository[wed.subjectCode], time)
-            if(thu.isNotBlank()) subjects += Subject(THURSDAY, thu.subjectCode, subjectNameRepository[thu.subjectCode], time)
-            if(fri.isNotBlank()) subjects += Subject(FRIDAY, fri.subjectCode, subjectNameRepository[fri.subjectCode], time)
-            if(sat.isNotBlank()) subjects += Subject(SATURDAY, sat.subjectCode, subjectNameRepository[sat.subjectCode], time)
+            if(mon.isNotBlank()) subjects += Subject(MONDAY, mon.code, subjectNameRepository[mon.code], time)
+            if(tue.isNotBlank()) subjects += Subject(TUESDAY, tue.code, subjectNameRepository[tue.code], time)
+            if(wed.isNotBlank()) subjects += Subject(WEDNESDAY, wed.code, subjectNameRepository[wed.code], time)
+            if(thu.isNotBlank()) subjects += Subject(THURSDAY, thu.code, subjectNameRepository[thu.code], time)
+            if(fri.isNotBlank()) subjects += Subject(FRIDAY, fri.code, subjectNameRepository[fri.code], time)
+            if(sat.isNotBlank()) subjects += Subject(SATURDAY, sat.code, subjectNameRepository[sat.code], time)
 
             return subjects
         }
 
-        private val String.subjectCode get() = substringBefore("-")
+        private val String.code get() = substringBefore("-")
     }
 }
 

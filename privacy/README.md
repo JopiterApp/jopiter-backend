@@ -6,5 +6,5 @@ Privacy Policy was provided by [App Privacy Policy Generator](https://app-privac
 
 ## How it works
 
-This module creates OpenAPI metadata using the *@OpenApi()* annotation.  
-Also, it is created a GET handler, which retrieves *privacy.html* from **./src/main/resources/**.
+This module creates OpenAPI metadata using the `@Operation` annotation.  
+An HTTP GET handler to return the privacy html file.

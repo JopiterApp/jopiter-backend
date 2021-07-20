@@ -59,7 +59,7 @@ class DynamoRestaurantItemRepositoryTest : ShouldSpec({
     }
 
     should("Retrieve items only from particular dates") {
-        val items = table.createItems(10_000)
+        val items = table.createItems()
 
         val result = target.get(1, items[0].date)
 
@@ -88,7 +88,7 @@ class DynamoRestaurantItemRepositoryTest : ShouldSpec({
     isolationMode = InstancePerTest
 })
 
-private fun DynamoDbTable<RestaurantItemEntity>.createItems(amount: Int = 1_000): List<RestaurantItem> {
+private fun DynamoDbTable<RestaurantItemEntity>.createItems(amount: Int = 200): List<RestaurantItem> {
     val items = restaurantItemArb.take(amount).toList()
     val databaseItems = items.distinctBy { it.restaurantId to it.date }.map { it.toRestaurantEntity() }
 

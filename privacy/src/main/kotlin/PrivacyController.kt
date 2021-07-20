@@ -18,27 +18,24 @@
 
 package app.jopiter.privacy
 
-import io.javalin.http.Context
-import io.javalin.plugin.openapi.annotations.OpenApi
-import io.javalin.plugin.openapi.annotations.OpenApiResponse
-import org.koin.dsl.module
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ResponseBody
 
-val privacyModule = module {
-    single { PrivacyController() }
-}
 
+@Controller
 class PrivacyController {
-    private val privacyHtml = PrivacyController::class.java.classLoader.getResource("privacy.html")!!.readText()
 
-    @OpenApi(
+    @GetMapping("/privacy")
+    @Operation(
         summary = "Privacy Policy",
-        description = "Jopiter App privacy policy",
+        description = "JopiterApp privacy policy",
         tags = ["privacy"],
         responses = [
-            OpenApiResponse(status = "200", description = "Returns the privacy policy file")
+            ApiResponse(responseCode = "200", description = "Returns the privacy policy file")
         ]
     )
-    fun get(context: Context) {
-        context.html(privacyHtml)
-    }
+    fun privacy() = "privacy.html"
 }

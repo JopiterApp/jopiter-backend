@@ -19,34 +19,45 @@ package app.jopiter.timetable
 
 import app.jopiter.timetable.repository.Subject
 import app.jopiter.timetable.repository.TimetableRepository
-import io.javalin.http.Context
-import io.javalin.plugin.openapi.annotations.OpenApi
-import io.javalin.plugin.openapi.annotations.OpenApiContent
-import io.javalin.plugin.openapi.annotations.OpenApiRequestBody
-import io.javalin.plugin.openapi.annotations.OpenApiResponse
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.parameters.RequestBody
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.RequestBody as SpringRequestBody
 
+@RestController("\${api.base.path}/timetable")
 class TimetableController(
-    private val timetableRepository: TimetableRepository
+    private val timetableRepository: TimetableRepository,
 ) {
-    @OpenApi(
-        summary = "Fetch a timetable from JupiterWeb",
+
+    @Operation(
+        summary = "Fetch a timetable from JupitereWeb",
         description = "Tries to login to user's account and obtain all information related to their timetable",
         tags = ["timetable"],
 
-        requestBody = OpenApiRequestBody([OpenApiContent(TimetableRequest::class)],true),
+        requestBody = RequestBody(content = [Content(schema = Schema(implementation = TimetableRequest::class))]),
 
         responses = [
-            OpenApiResponse("200", [OpenApiContent(Subject::class, true)]),
-            OpenApiResponse("401"),
-            OpenApiResponse("503")
+            ApiResponse(
+                responseCode = "200",
+                content = [Content(array = ArraySchema(schema = Schema(implementation = Subject::class)))]
+            ),
+            ApiResponse(responseCode = "401"),
+            ApiResponse(responseCode = "503")
         ]
     )
-    fun timetable(context: Context) {
-        val (user, password) = context.body<TimetableRequest>()
-        try {
-            context.json(timetableRepository.get(user, password))
+    @PostMapping()
+    fun timetable(@SpringRequestBody request: TimetableRequest): ResponseEntity<Set<Subject>> {
+        val (user, password) = request
+        return try {
+            ResponseEntity.ok(timetableRepository.get(user, password))
         } catch (_: Throwable) {
-            context.status(401)
+            ResponseEntity.badRequest().build()
         }
     }
 

@@ -22,12 +22,14 @@ import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.repository.dynamo.DynamoRestaurantItemRepository
 import app.jopiter.restaurants.repository.usp.USPRestaurantItemRepository
 import com.github.benmanes.caffeine.cache.Caffeine
+import org.springframework.stereotype.Repository
 import org.threeten.extra.YearWeek
 import java.time.Duration.ofMinutes
 import java.time.LocalDate
 
 private typealias RestaurantKey = Pair<Int, LocalDate>
 
+@Repository
 class RestaurantItemRepository(
     private val dynamoRestaurantItemRepository: DynamoRestaurantItemRepository,
     private val uspRestaurantItemRepository: USPRestaurantItemRepository

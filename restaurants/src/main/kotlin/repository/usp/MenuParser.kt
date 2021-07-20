@@ -20,6 +20,8 @@ package app.jopiter.restaurants.repository.usp
 
 import app.jopiter.restaurants.model.Period
 import app.jopiter.restaurants.model.RestaurantItem
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 import java.time.LocalDate
 import kotlin.text.RegexOption.IGNORE_CASE
 
@@ -79,7 +81,8 @@ private fun String.cleanItems() =
         .filterNot { it.contains("Marmitex", true) }
 
 
-private fun String.cleanString() = replace("c/", "com", true).substringAfter(":").trim().toLowerCase().capitalize()
+private fun String.cleanString() =
+    replace("c/", "com", true).substringAfter(":").trim().lowercase().replaceFirstChar { it.titlecase() }
 
 data class Menu(
     val mainItem: String?,
@@ -94,6 +97,10 @@ fun RestaurantItem(restaurantId: Int, date: LocalDate, period: Period, calories:
     RestaurantItem(
         restaurantId, date, period, calories, mainItem, vegetarianItem, dessertItem, mundaneItems, unparsedMenu
     )
+}
+
+@Configuration class ParsersConfig {
+    @Bean fun parsers() = parsers
 }
 
 val parsers: Map<Int, MenuParser> = mapOf(

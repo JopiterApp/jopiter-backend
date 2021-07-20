@@ -23,16 +23,21 @@ import app.jopiter.restaurants.model.Period.Lunch
 import app.jopiter.restaurants.model.RestaurantItem
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.jackson.responseObject
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import java.time.LocalDate
 import java.time.LocalDate.parse
 import java.time.format.DateTimeFormatter.ofPattern
 
 private const val RequestTimeoutMillis = 2_000
 
+@Repository
 class USPRestaurantItemRepository(
-    private val uspBaseUrl: String,
+    @Value("\${usp.base.url}") val uspBaseUrl: String,
     private val parsers: Map<Int, MenuParser>,
-    private val uspHash: String
+    @Value("\${usp.hash}")private val uspHash: String
 ) {
 
     fun fetch(restaurantId: Int): Set<RestaurantItem> {

@@ -19,7 +19,9 @@
 package app.jopiter.timetable.repository
 
 import org.jsoup.Jsoup.connect
+import org.springframework.stereotype.Repository
 
+@Repository
 class SubjectNameRepository {
 
     private val url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis="
