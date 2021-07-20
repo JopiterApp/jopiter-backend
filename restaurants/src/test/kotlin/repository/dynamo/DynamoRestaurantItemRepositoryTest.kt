@@ -59,7 +59,7 @@ class DynamoRestaurantItemRepositoryTest : ShouldSpec({
     }
 
     should("Retrieve items only from particular dates") {
-        val items = table.createItems(10_000)
+        val items = table.createItems(1_000)
 
         val result = target.get(1, items[0].date)
 

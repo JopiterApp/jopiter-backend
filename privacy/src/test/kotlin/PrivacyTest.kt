@@ -18,15 +18,24 @@
 
 package app.jopiter.privacy
 
-import app.jopiter.jopiter
 import com.github.kittinunf.fuel.httpGet
 import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.string.shouldContain
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.test.context.ContextConfiguration
 
-class PrivacyTest : ShouldSpec({
-    val app = jopiter().start(0)
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+@ContextConfiguration(classes = [PrivacyController::class])
+@EnableAutoConfiguration
+class PrivacyTest(@LocalServerPort val port: Int) : ShouldSpec({
+
+    extension(SpringExtension)
 
     should("Return the privacy file from the right path") {
-        "http://localhost:${app.port()}/privacy".httpGet().responseString().third.get() shouldContain "Leonardo Colman Lopes built the Jopiter app"
+        "http://localhost:$port/privacy".httpGet().responseString().third.get() shouldContain "Leonardo Colman Lopes built the Jopiter app"
     }
 })

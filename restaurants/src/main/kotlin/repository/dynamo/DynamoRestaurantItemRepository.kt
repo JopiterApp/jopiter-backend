@@ -24,6 +24,9 @@ import app.jopiter.restaurants.model.RestaurantItem
 import br.com.colman.dynamodb.Key
 import br.com.colman.dynamodb.putItems
 import br.com.colman.dynamodb.table
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Repository
 import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean
 import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey
@@ -32,6 +35,11 @@ import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional.sortBegin
 import java.time.LocalDate
 import java.time.LocalDate.parse
 
+@Configuration class DynamoClientConfiguration {
+    @Bean fun dynamoDbEnhancedClient() = DynamoDbEnhancedClient.create()
+}
+
+@Repository
 class DynamoRestaurantItemRepository(dynamoDb: DynamoDbEnhancedClient) {
 
     private val restaurantsTable = dynamoDb.table<RestaurantItemEntity>("restaurants")

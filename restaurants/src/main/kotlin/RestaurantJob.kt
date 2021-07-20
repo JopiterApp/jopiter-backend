@@ -18,22 +18,19 @@
 
 package app.jopiter.restaurants
 
+import app.jopiter.restaurants.model.Restaurant
 import app.jopiter.restaurants.repository.RestaurantItemRepository
+import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Component
 import java.time.LocalDate.now
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit.MINUTES
 
+@Component
 class RestaurantJob(
-    scheduledExecutor: ScheduledExecutorService,
-    private val repository: RestaurantItemRepository,
-    private val knownRestaurants: Collection<Int>
-) : Runnable {
+    private val repository: RestaurantItemRepository
+) {
 
-    init {
-        scheduledExecutor.scheduleWithFixedDelay(this, 0, 5, MINUTES)
-    }
-
-    override fun run() {
-        knownRestaurants.forEach { repository.get(it, setOf(now())) }
-    }
+    @Scheduled(fixedRate = 15_000)
+    fun run() = Restaurant.values().forEach { repository.get(it.id, setOf(now())) }
 }

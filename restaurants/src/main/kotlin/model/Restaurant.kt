@@ -65,7 +65,7 @@ enum class Campus(val campusName: String, val restaurants: List<Restaurant>) {
 
 /**
  * Required for OpenAPI to work
- * 
+ *
  * https://github.com/swagger-api/swagger-core/issues/3691
  */
 @Schema(name = "Restaurant")
@@ -113,7 +113,7 @@ enum class Restaurant(val id: Int, val restaurantName: String) {
     // Lorena
     Eel1(17, "EEL - Área I"),
     Eel2(23, "EEL - Área II"),;
-    
+
     companion object {
         fun getById(id: Int) = values().first { it.id == id }
     }

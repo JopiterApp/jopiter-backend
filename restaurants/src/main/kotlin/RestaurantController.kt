@@ -19,60 +19,56 @@
 package app.jopiter.restaurants
 
 import app.jopiter.restaurants.model.Campus
-import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.repository.RestaurantItemRepository
-import io.javalin.http.Context
-import io.javalin.plugin.openapi.annotations.OpenApi
-import io.javalin.plugin.openapi.annotations.OpenApiContent
-import io.javalin.plugin.openapi.annotations.OpenApiParam
-import io.javalin.plugin.openapi.annotations.OpenApiResponse
-import java.time.LocalDate.parse
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.format.annotation.DateTimeFormat.ISO.DATE
+import org.springframework.stereotype.Component
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+import java.time.LocalDate
 
-
+@RestController("\${api.base.path}/restaurants")
 class RestaurantController(
     private val restaurantItemRepository: RestaurantItemRepository
 ) {
 
-    @OpenApi(
+    @Operation(
         summary = "List all restaurants and their campi",
         description = "List all restaurants that are available, including to which campus it belongs",
         tags = ["restaurant"],
         responses = [
-            OpenApiResponse("200", [OpenApiContent(Campus::class, true)])
+            ApiResponse(responseCode = "200", content = [
+                Content(array = ArraySchema(schema = Schema(implementation = Campus::class)))
+            ])
         ]
     )
-    fun list(context: Context) {
-        context.json(Campus.values())
-    }
+    @GetMapping
+    fun list() = Campus.values().toList()
 
-    @OpenApi(
+    @Operation(
         summary = "List Items",
         description = "Retrieves all items for the chosen dates and restaurant",
         tags = ["restaurant"],
 
-        queryParams = [
-            OpenApiParam(
-                name = "restaurantId",
-                type = Int::class,
-                required = true,
-                description = "The restaurant ID as defined by GET /restaurants"
+        parameters = [
+            Parameter(
+                name = "restaurantId", description = "The restaurant ID as defined by /restaurants", required = true
             ),
-            OpenApiParam(
-                name = "date",
-                type = String::class,
-                required = true,
-                description = "The dates you want to fetch items for. ISO_LOCAL_DATE format (yyyy-MM-dd)",
-                isRepeatable = true
+            Parameter(
+                name = "date", description = "The dates you want to fetch items for. ISO_LOCAL_DATE format (yyyy-MM-dd)"
             )
-        ],
-
-        responses = [
-            OpenApiResponse("200", [OpenApiContent(RestaurantItem::class, isArray = true)])
         ]
     )
-    fun items(ctx: Context) {
-        val restaurantIds = ctx.queryParam("restaurantId", "0")!!.toInt()
-        val dates = ctx.queryParams("date").map { parse(it) }.toSet()
-        ctx.json(restaurantItemRepository.get(restaurantIds, dates))
-    }
+    @GetMapping("/items")
+    fun items(
+        @RequestParam("restaurantId") restaurantId: Int,
+        @RequestParam("date") @DateTimeFormat(iso = DATE) dates: Set<LocalDate>
+    ) = restaurantItemRepository.get(restaurantId, dates)
 }

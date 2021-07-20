@@ -26,18 +26,23 @@ group = "app.jopiter"
 
 plugins {
     application
-    kotlin("jvm") version "1.4.31"
-    id("org.jetbrains.kotlin.plugin.noarg") version "1.4.31" apply false
+    kotlin("jvm") version "1.5.20"
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.5.20" apply false
+
+    kotlin("plugin.spring") version "1.5.20"
+    id("org.springframework.boot") version "2.5.2"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
     id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
-@Suppress("DEPRECATION")
-application.mainClassName = "app.jopiter.JavalinAppKt"
-
 allprojects {
     apply(plugin = "kotlin")
     apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "org.springframework.boot")
+    apply(plugin = "kotlin-spring")
+    apply(plugin = "io.spring.dependency-management")
 
     repositories {
         mavenLocal()
@@ -50,21 +55,15 @@ allprojects {
         // Kotlin
         implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.31")
 
-        // Javalin
-        implementation("io.javalin:javalin:3.13.4")
-        implementation("io.javalin:javalin-openapi:3.13.4") {
-            exclude("io.swagger.parser.v3", "swagger-parser")
-        }
+        // Spring
+        implementation("org.springframework.boot:spring-boot-starter")
+        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation("org.springdoc:springdoc-openapi-ui:1.5.9")
+        implementation("org.springdoc:springdoc-openapi-kotlin:1.5.9")
+        implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.9")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("io.kotest.extensions:kotest-extensions-spring:1.0.0")
 
-        // Koin
-        implementation("org.koin:koin-core:2.2.0")
-        testImplementation("org.koin:koin-test:2.2.0")
-
-        // SLF4J
-        implementation("org.slf4j:slf4j-simple:1.7.30")
-
-        // Log4J
-        implementation("org.apache.logging.log4j:log4j-core:2.14.0")
 
         // Fuel
         implementation("com.github.kittinunf.fuel:fuel:2.3.1")
@@ -72,10 +71,9 @@ allprojects {
         implementation("com.github.kittinunf.fuel:fuel-coroutines:2.3.1")
 
         // Kotest
-        testImplementation("io.kotest:kotest-runner-junit5:4.4.3")
-        testImplementation("io.kotest:kotest-assertions-json:4.4.3")
-        testImplementation("io.kotest:kotest-extensions-koin:4.4.3")
-        testImplementation("io.kotest:kotest-property:4.4.3")
+        testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
+        testImplementation("io.kotest:kotest-assertions-json:4.6.1")
+        testImplementation("io.kotest:kotest-property:4.6.1")
 
         // Mockk
         testImplementation("io.mockk:mockk:1.11.0")
@@ -102,7 +100,7 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = "11"
         }
     }
 }
