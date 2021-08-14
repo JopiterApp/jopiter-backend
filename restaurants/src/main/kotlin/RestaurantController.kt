@@ -19,6 +19,7 @@
 package app.jopiter.restaurants
 
 import app.jopiter.restaurants.model.Campus
+import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.repository.RestaurantItemRepository
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -37,7 +38,7 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("\${api.base.path}/restaurants")
 class RestaurantController(
-    private val restaurantItemRepository: RestaurantItemRepository
+    private val restaurantItemRepository: RestaurantItemRepository,
 ) {
 
     @Operation(
@@ -46,7 +47,8 @@ class RestaurantController(
         tags = ["restaurant"],
         responses = [
             ApiResponse(responseCode = "200", content = [
-                Content(array = ArraySchema(schema = Schema(implementation = Campus::class)))
+                Content(array = ArraySchema(schema = Schema(implementation = Campus::class)),
+                    mediaType = "application/json")
             ])
         ]
     )
@@ -65,11 +67,18 @@ class RestaurantController(
             Parameter(
                 name = "date", description = "The dates you want to fetch items for. ISO_LOCAL_DATE format (yyyy-MM-dd)"
             )
+        ],
+
+        responses = [
+            ApiResponse(responseCode = "200", content = [
+                Content(array = ArraySchema(schema = Schema(implementation = RestaurantItem::class)),
+                    mediaType = "application/json")
+            ])
         ]
     )
     @GetMapping("/items")
     fun items(
         @RequestParam("restaurantId") restaurantId: Int,
-        @RequestParam("date") @DateTimeFormat(iso = DATE) dates: Set<LocalDate>
+        @RequestParam("date") @DateTimeFormat(iso = DATE) dates: Set<LocalDate>,
     ) = restaurantItemRepository.get(restaurantId, dates)
 }
