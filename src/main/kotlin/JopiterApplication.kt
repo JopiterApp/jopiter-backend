@@ -45,6 +45,7 @@ class JopiterApplication {
         .info(Info()
             .title("Jopiter Backend")
             .description("API specification for the Jopiter App")
+            .version("1.0.0")
             .license(License()
                 .name("AGPL-3.0 License")
                 .url("https://github.com/JopiterApp/jopiter-backend/blob/master/LICENSE")
