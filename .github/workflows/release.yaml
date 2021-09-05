@@ -21,10 +21,10 @@ jobs:
       - name: Deploy to Beanstalk
         uses: einaregilsson/beanstalk-deploy@v16
         with:
-          application_name: jopiter backend
-          environment_name: JopiterBackend-env
+          application_name: Jopiter Backend
+          environment_name: Jopiterbackend-env
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: us-east-1
+          region: sa-east-1
           version_label: ${{ github.run_number }}
           deployment_package: build/libs/jopiter-backend.jar
