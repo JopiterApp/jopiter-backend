@@ -26,15 +26,21 @@ repositories {
 
 dependencies {
     // Dynamo
-    implementation("software.amazon.awssdk:dynamodb-enhanced:2.16.29")
+    implementation("software.amazon.awssdk:dynamodb-enhanced:2.17.34")
     implementation("br.com.colman.dynamodb:kotlin-dynamodb-extensions:0.2.0")
     testImplementation("com.amazonaws:DynamoDBLocal:1.13.5")
 
     // YearWeek
-    implementation("org.threeten:threeten-extra:1.6.0")
+    implementation("org.threeten:threeten-extra:1.7.0")
 
     // Caffeine
-    implementation("com.github.ben-manes.caffeine:caffeine:3.0.1")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.0.3")
+
+    // IA
+    implementation("com.github.haifengl:smile-kotlin:2.6.0")
+    implementation("org.apache.commons:commons-csv:1.8")
+    implementation("org.apache.lucene:lucene-core:8.9.0")
+    implementation("org.apache.lucene:lucene-analyzers:3.6.2")
 }
 
 configure<NoArgExtension> {

@@ -30,7 +30,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.noarg") version "1.5.20" apply false
 
     kotlin("plugin.spring") version "1.5.20"
-    id("org.springframework.boot") version "2.5.2"
+    id("org.springframework.boot") version "2.5.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
@@ -46,7 +46,6 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
         maven(url = "https://jitpack.io")
     }
 
@@ -58,9 +57,9 @@ allprojects {
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-actuator")
-        implementation("org.springdoc:springdoc-openapi-ui:1.5.9")
-        implementation("org.springdoc:springdoc-openapi-kotlin:1.5.9")
-        implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.9")
+        implementation("org.springdoc:springdoc-openapi-ui:1.5.10")
+        implementation("org.springdoc:springdoc-openapi-kotlin:1.5.10")
+        implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.10")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.0.0")
 
@@ -76,14 +75,14 @@ allprojects {
         testImplementation("io.kotest:kotest-property:4.6.1")
 
         // Mockk
-        testImplementation("io.mockk:mockk:1.11.0")
+        testImplementation("io.mockk:mockk:1.12.0")
 
         // Mock Server
         testImplementation("org.mock-server:mockserver-netty:5.11.2") {
             exclude("com.google.guava")
         }
 
-        // Root project 
+        // Root project
         testImplementation(rootProject)
     }
 

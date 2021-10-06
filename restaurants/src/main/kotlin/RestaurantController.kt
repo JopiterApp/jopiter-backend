@@ -20,6 +20,7 @@ package app.jopiter.restaurants
 
 import app.jopiter.restaurants.model.Campus
 import app.jopiter.restaurants.model.RestaurantItem
+import app.jopiter.restaurants.model.RestaurantItemPredictor
 import app.jopiter.restaurants.repository.RestaurantItemRepository
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -39,6 +40,7 @@ import java.time.LocalDate
 @RequestMapping("\${api.base.path}/restaurants")
 class RestaurantController(
     private val restaurantItemRepository: RestaurantItemRepository,
+    private val restaurantItemPredictor: RestaurantItemPredictor
 ) {
 
     @Operation(
@@ -81,4 +83,9 @@ class RestaurantController(
         @RequestParam("restaurantId") restaurantId: Int,
         @RequestParam("date") @DateTimeFormat(iso = DATE) dates: Set<LocalDate>,
     ) = restaurantItemRepository.get(restaurantId, dates)
+
+    @GetMapping("/predict")
+    fun predict(
+        @RequestParam("dish") dish: String
+    ) = restaurantItemPredictor.predict(dish)
 }
