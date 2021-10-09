@@ -56,14 +56,13 @@ private val examples = listOf(
     Example(3, "Fechado", null, null, null),
     Example(4, "Fechado", null, null, null),
     Example(5, "Em virtude da Pandemia estamos servindo Marmitex \nArroz branco/Feijão carioca\nPrato Principal: Frango grelhado\nOpção Vegetariana: Ovo mexido\nGuarnição: Macarrão ao molho (Contém glúten) \nSalada: Alface/Cenoura", "Frango grelhado", "Ovo mexido", null, "Arroz branco", "Feijão carioca", "Macarrão ao molho (contém glúten)", "Alface", "Cenoura"),
-    Example(6, "Informamos que a partir de amanhã, 24/03, terça-feira, os Restaurantes Universitários estarão fechados em decorrência da quarentena decretada pelo Governo do Estado",
-    null, null, null),
+    Example(6, "Arroz/feijão/arroz integral\nBife de contrafilé acebolado\nOpção: PVT com alho-poró\nMandioquinha com salsa\nSalada de acelga\nDoce de banana\nMinipão",
+    "Bife de contrafilé acebolado", "Pvt com alho-poró", "Doce de banana","Arroz", "Feijão", "Arroz integral", "Mandioquinha com salsa", "Salada de acelga", "Minipão"),
         Example(7, "Informamos que a partir de amanhã, 24/03, terça-feira, os Restaurantes Universitários estarão fechados em decorrência da quarentena decretada pelo Governo do Estado",
     null, null, null),
     Example(8, "Informamos que a partir de amanhã, 24/03, terça-feira, os Restaurantes Universitários estarão fechados em decorrência da quarentena decretada pelo Governo do Estado",
         null, null, null),
-    Example(9, "Informamos que, a partir de 01/01/2021, o\nRestaurante das Químicas não mais fornecerá\ntalheres descartáveis, tendo em vista a\nsustentabilidade e atendimento à Lei Nº 17.261,\ndo município de São Paulo, a qual proíbe o\nfornecimento de copos e utensílios de material\nplástico em estabelecimentos de alimentação.",
-        null, null, null),
+    Example(9, "Arroz / Feijão \nFilé de peito de frango empanado\nOpção: PVT com alho-poró\nCreme de milho\nSalada de almeirão\nBanana  \nMinipão", "Filé de peito de frango empanado", "Pvt com alho-poró", "Banana", "Arroz", "Feijão", "Creme de milho", "Salada de almeirão", "Minipão"),
     Example(11, "Informamos que a partir de amanhã, 24/03, terça-feira, os Restaurantes Universitários estarão fechados em decorrência da quarentena decretada pelo Governo do Estado.",
         null, null, null),
     Example(12, "Informamos que a partir de amanhã, 24/03, terça-feira, os Restaurantes Universitários estarão fechados em decorrência da quarentena decretada pelo Governo do Estado.",
@@ -76,7 +75,7 @@ private val examples = listOf(
         null, null, null),
     Example(19, "Arroz / Feijão\nBife Acebolado (Patinho)\nJardineira de Legumes\nMelão\n\nOp veg: Grão de bico à Primavera\n\nGeral: 885 Kcal\nVegetariano: 812 Kcal",
     "Bife acebolado (patinho)", "Grão de bico à primavera", "Melão", "Arroz", "Feijão", "Jardineira de legumes"),
-    Example(20, "Pernil suíno ao forno 393,8 kcal\nOvo frito 223,5 kcal\nAlface e abacaxi 25,7 kcal\nCenoura vick contem lactose 84,9 kcal\nArroz 243,6 kcal\nFeijão 164,8 kcal\nBanana 91,5 kcal\nSuco laranja 57 kcal", "Pernil suíno ao forno", "Ovo frito", "Banana", "Alface e abacaxi", "Cenoura vick contem lactose", "Arroz", "Feijão", "Suco laranja")
+    Example(20, "CARNE ASSADA (COXÃO DURO) (336,4 kcal)\n\nOVO COZIDO\n\nALFACE\n\nREPOLHO ROXO E ABACAXI\n\nABÓBORA EM CUBOS COZIDA\n\n\nCOUVE REFOGADO\n\nARROZ BRANCO\n\nARROZ INTEGRAL\n\nFEIJÃO CARIOCA\n\nLARANJA PÊRA\n\nSUCO \n\nMINI PÃO FRANCÊS (25G)", "Carne assada (coxão duro)", "Ovo cozido", "Laranja pêra", "Alface", "Repolho roxo e abacaxi", "Abóbora em cubos cozida", "Couve refogado", "Arroz branco", "Arroz integral", "Feijão carioca", "Suco", "Mini pão francês (25g)")
 )
 
 private class Example(val restaurant: Int, val text: String, val main: String?, val vegetarian: String?, val dessert: String?, vararg val mundane: String)

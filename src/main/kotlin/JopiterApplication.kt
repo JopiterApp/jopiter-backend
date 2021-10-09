@@ -38,7 +38,9 @@ import org.springframework.scheduling.annotation.EnableScheduling
     PropertySource("application-restaurants.properties")
 )
 class JopiterApplication {
-    @Bean fun objectMapper() = jacksonObjectMapper().registerKotlinModule().registerModule(JavaTimeModule())
+    @Bean fun objectMapper() = jacksonObjectMapper()
+        .registerKotlinModule()
+        .registerModule(JavaTimeModule())
 
     @Bean
     fun openApi() = OpenAPI()

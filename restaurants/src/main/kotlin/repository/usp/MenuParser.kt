@@ -48,6 +48,14 @@ val piracicabaParser = MenuParser {
     Menu(main, veg, null, items.cleanStrings(main, veg), it)
 }
 
+val centralParser = MenuParser {
+    val items = it.cleanItems()
+    val veg = items.find("Opção:").single()
+    val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
+    val dessert = items.getOrNull(items.lastIndex - 1)?.cleanString()
+    Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
+}
+
 val centralRibeiraoParser = MenuParser {
     val items = it.cleanItems()
     val veg = items.find("veg:").single()
@@ -60,7 +68,7 @@ val bauruParser = MenuParser {
     val items = it.cleanItems()
     val main = items[0].cleanString()
     val veg = items[1].cleanString()
-    val dessert = items[items.lastIndex - 1].cleanString()
+    val dessert = items[items.lastIndex - 2].cleanString()
     Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
 }
 
@@ -72,11 +80,11 @@ private fun List<String>.find(vararg containing: String) =
 private fun List<String>.findIndex(value: String?) = if(value == null) -1 else indexOfFirst { it.contains(value, true) }
 
 private fun List<String>.cleanStrings(vararg specialItems: String?) =
-    (map { it.cleanString() } - specialItems).filterNot { it.isNullOrBlank() }.filterNotNull()
+    (map { it.cleanString() } - specialItems.toSet()).filterNot { it.isNullOrBlank() }.filterNotNull()
 
 private fun String.cleanItems() =
     split("\n", "/")
-        .map { it.replace(Regex("\\d*,*\\.*\\d*\\s*kcal", IGNORE_CASE), "") }
+        .map { it.replace(Regex("[()]*\\d*,*\\.*\\d*\\s*kcal[(())]*", IGNORE_CASE), "") }
         .filter { it.isNotBlank() }
         .filterNot { it.contains("Marmitex", true) }
 
@@ -107,6 +115,8 @@ val parsers: Map<Int, MenuParser> = mapOf(
     1 to luizDeQueirozParser,
     2 to centralSaoCarlosParser,
     5 to piracicabaParser,
+    6 to centralParser,
+    9 to centralParser,
     19 to centralRibeiraoParser,
     20 to bauruParser
-) + listOf(3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17).map { it to closedMenuParser }
+) + listOf(3, 4, 7, 8, 10, 11, 12, 13, 14, 17).map { it to closedMenuParser }

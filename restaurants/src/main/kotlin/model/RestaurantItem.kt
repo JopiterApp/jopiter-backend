@@ -18,11 +18,13 @@
 
 package app.jopiter.restaurants.model
 
+import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING
 import java.time.LocalDate
 
 data class RestaurantItem(
     val restaurantId: Int,
-    val date: LocalDate,
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = STRING) val date: LocalDate,
     val period: Period,
     val calories: Long?,
     val mainItem: String?,
