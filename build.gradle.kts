@@ -83,7 +83,7 @@ allprojects {
             exclude("com.google.guava")
         }
 
-        // Root project 
+        // Root project
         testImplementation(rootProject)
     }
 
@@ -110,3 +110,4 @@ dependencies {
     implementation(project(":restaurants"))
     implementation(project(":timetable"))
 }
+
