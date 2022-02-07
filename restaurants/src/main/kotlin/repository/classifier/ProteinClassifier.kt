@@ -63,9 +63,9 @@ class ProteinClassifier(
   }
 
   private val corpus = dataset.map { it.name.bag(commaSeparatedStopwords, BrStemmer::stem) }
-  private val features = corpus.flatMap { it.keys }.toTypedArray()
-  private val vectors = corpus.map { vectorize(features, it) }
-  private val preprocessedData = tfidf(vectors)
+  private val vocabulary = corpus.flatMap { it.keys }.toTypedArray()
+  private val vectorizedCorpus = corpus.map { vectorize(vocabulary, it) }
+  private val preprocessedData = tfidf(vectorizedCorpus)
 
   private val groupModel =
     ovr(preprocessedData.toTypedArray(), dataset.map { it.foodGroup.ordinal }.toIntArray()) { x, y ->
@@ -78,7 +78,7 @@ class ProteinClassifier(
     }
 
   fun classify(name: String): ProteinItem {
-    val preProcessedName = vectorize(features, name.bag(commaSeparatedStopwords, BrStemmer::stem))
+    val preProcessedName = vectorize(vocabulary, name.bag(commaSeparatedStopwords, BrStemmer::stem))
 
     val predictedGroup = groupModel.predict(preProcessedName)
     val predictedPreparation = prepModel.predict(preProcessedName)
