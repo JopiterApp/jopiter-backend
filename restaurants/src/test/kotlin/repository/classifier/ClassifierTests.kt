@@ -19,30 +19,33 @@
 package app.jopiter.restaurants.repository.classifier
 
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.doubles.plusOrMinus
 import io.kotest.matchers.doubles.shouldBeGreaterThan
-import io.kotest.matchers.shouldBe
 import kotlin.random.Random
 
-class ProteinClassifierTest : FunSpec({
+class ClassifierTests : FunSpec({
 
   val datasetLines = "classified_items/protein.csv".loadCsv()
-  val target = ProteinClassifier(datasetLines.toStream())
+  val rows = datasetLines.map { it.split(",") }.map {
+    val name = it[0]
+    val columns = it.subList(1, it.size)
+    ClassifiableRow(name, columns)
+  }
 
   test("Creates a model with 80%+ accuracy") {
-    val (trainData, testData) = datasetLines.partition { Random.nextDouble() <= 0.90 }
+    val (trainData, testData) = rows.partition { Random.nextDouble() <= 0.90 }
 
-    val targetWithReducedDataset = ProteinClassifier(trainData.toStream())
+    val targetWithReducedDataset = Classifier(trainData)
 
 
     var rightGuesses = 0
-    testData.map { it.split(",") }.forEach { (name, group, prep) ->
-      val (_, predictedGroup, predictedPrep) = targetWithReducedDataset.classify(name)
-      if(group == predictedGroup.description) rightGuesses++
-      if(prep == predictedPrep.description) rightGuesses++
+    testData.forEach { (name, columns) ->
+      val (_, predictedColumns) = targetWithReducedDataset.classify(name)
+      columns.zip(predictedColumns).forEach { (truth, predicted) ->
+        if(truth == predicted) rightGuesses++
+      }
     }
 
-    val accuracy = rightGuesses.toDouble() / (testData.size * 2) // Once for group once for prep
+    val accuracy = rightGuesses.toDouble() / (testData.size * rows.first().columns.size)
 
     accuracy shouldBeGreaterThan 0.80
     println("Accuracy: $accuracy")
@@ -52,6 +55,5 @@ class ProteinClassifierTest : FunSpec({
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 private fun String.loadCsv() =
-  ProteinClassifierTest::class.java.classLoader.getResourceAsStream(this).reader().readLines()
+  ClassifierTests::class.java.classLoader.getResourceAsStream(this).reader().readLines()
 
-private fun List<String>.toStream() = joinToString("\n").byteInputStream()
