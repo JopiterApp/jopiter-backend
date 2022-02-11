@@ -19,38 +19,51 @@
 package app.jopiter.restaurants.repository.classifier
 
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.doubles.shouldBeGreaterThan
+import io.kotest.core.spec.style.funSpec
+import io.kotest.matchers.doubles.shouldBeGreaterThanOrEqual
 import kotlin.random.Random
 
-class ClassifierTests : FunSpec({
+fun classifierTest(csvName: String) = funSpec {
+  context(csvName) {
+    val datasetLines = "classified_items/$csvName.csv".loadCsv()
+    val rows = datasetLines.map { it.split(",") }.map {
+      val name = it[0]
+      val columns = it.drop(1)
+      ClassifiableRow(name, columns)
+    }
+    context("Creates a model with 80%+ accuracy") {
+      val (trainData, testData) = rows.partition { Random.nextDouble() <= 0.80 }
 
-  val datasetLines = "classified_items/protein.csv".loadCsv()
-  val rows = datasetLines.map { it.split(",") }.map {
-    val name = it[0]
-    val columns = it.subList(1, it.size)
-    ClassifiableRow(name, columns)
-  }
+      val target = Classifier(trainData)
 
-  test("Creates a model with 80%+ accuracy") {
-    val (trainData, testData) = rows.partition { Random.nextDouble() <= 0.90 }
+      val realClassifications = testData.map { it.columns }
+      val predictions = testData.map { target.classify(it.name).predictedColumns }
 
-    val targetWithReducedDataset = Classifier(trainData)
+      val accuraciesPerColumn = List(predictions[0].size) { i ->
+        val realColumn = realClassifications.map { it[i] }
+        val predictedColumn = predictions.map { it[i] }
 
+        val correctGuesses = realColumn.zip(predictedColumn).count { (truth, prediction) ->
+          truth == prediction
+        }.toDouble()
 
-    var rightGuesses = 0
-    testData.forEach { (name, columns) ->
-      val (_, predictedColumns) = targetWithReducedDataset.classify(name)
-      columns.zip(predictedColumns).forEach { (truth, predicted) ->
-        if(truth == predicted) rightGuesses++
+        correctGuesses / realColumn.size.toDouble()
+      }
+
+      accuraciesPerColumn.forEachIndexed { index, d ->
+        test("Column $index") {
+          println("Accuracy of column $index: $d")
+          d shouldBeGreaterThanOrEqual 0.80
+        }
       }
     }
-
-    val accuracy = rightGuesses.toDouble() / (testData.size * rows.first().columns.size)
-
-    accuracy shouldBeGreaterThan 0.80
-    println("Accuracy: $accuracy")
-
   }
+}
+
+class ClassifierTests : FunSpec({
+  include(classifierTest("protein"))
+  include(classifierTest("vegetarian"))
+  include(classifierTest("dessert"))
 })
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
