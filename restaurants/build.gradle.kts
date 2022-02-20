@@ -40,7 +40,7 @@ dependencies {
     implementation("com.github.haifengl:smile-kotlin:2.6.0")
     implementation("org.apache.commons:commons-csv:1.8")
     implementation("org.apache.lucene:lucene-core:8.9.0")
-    implementation("org.apache.lucene:lucene-analyzers:3.6.2")
+    implementation("io.michaelrocks.bimap:bimap:1.1.0")
 }
 
 configure<NoArgExtension> {

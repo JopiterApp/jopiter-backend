@@ -16,8 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package app.jopiter.restaurants.repository.classifier
+package app.jopiter.restaurants.classifier
 
+import io.michaelrocks.bimap.BiMap
+import io.michaelrocks.bimap.HashBiMap
 import org.apache.lucene.analysis.br.BrazilianStemmer
 import smile.classification.ovr
 import smile.classification.svm
@@ -27,50 +29,50 @@ import smile.nlp.tfidf
 import smile.nlp.vectorize
 import smile.classification.Classifier as SmileClassifier
 
-private val PortugueseStopWords by lazy {
-  Classifier::class.java.classLoader.getResourceAsStream("./classified_items/portuguese_stopwords.txt").reader()
+val PortugueseStopWords by lazy {
+  Classifier::class.java.classLoader.getResourceAsStream("classified_items/portuguese_stopwords.txt").reader()
     .readText()
 }
 
-class PreProcesser(
-  documents: List<String>,
-  private val csvStopWords: String = PortugueseStopWords,
-  private val stemmer: BrStemmer = BrStemmer,
-) {
-
-  private val corpus = documents.map { it.bagged() }
-  private val vocabulary = corpus.flatMap { it.keys }.toTypedArray()
-  private val vectorizedCorpus = corpus.map { it.vectorized() }
-
-  val preProcessedDocuments = tfidf(vectorizedCorpus).toTypedArray()
-
-  fun preProcess(document: String) = vectorize(vocabulary, document.bagged())
-
-  private fun String.bagged() = bag(csvStopWords, stemmer::stem)
-
-  private fun Map<String, Int>.vectorized() = vectorize(vocabulary, this)
-}
-
 class Classifier(
-  rows: List<ClassifiableRow>
+  rows: List<ClassifiableRow>,
 ) {
   private val documents = rows.map { it.name }
   private val preProcessor = PreProcesser(documents)
 
   private val columns = List(rows[0].columns.size) { i ->
-    rows.map { it.columns[i] }
+    rows.map {
+      it.columns[i]
+    }
   }
 
   private val predictors = columns.map {
-    val classes = it.distinct()
-    val classifiedColumn = it.map { classes.indexOf(it) }.toIntArray()
+    val categories = it.distinct()
 
-    val classifier = ovr(preProcessor.preProcessedDocuments, classifiedColumn) { x, y ->
-      svm(x, y, LinearKernel(), 0.5)
+    if (categories.size == 2) {
+      booleanPredictor(categories, it)
+    } else {
+      multiclassPredictor(categories, it)
     }
-
-    Predictor(classifier, classes)
   }
+
+
+  private fun booleanPredictor(classes: List<String>, values: List<String>): Predictor {
+    val classMap = HashBiMap.create(mapOf(-1 to classes[0], 1 to classes[1]))
+    val columnTruth = values.map { classMap.inverse[it]!! }.toIntArray()
+    val classifier = svm(preProcessor.preparedDocuments, columnTruth, LinearKernel(), 0.5)
+    return Predictor(classifier, classMap)
+  }
+
+  private fun multiclassPredictor(classes: List<String>, values: List<String>): Predictor {
+    check(classes.none { it.isEmpty() })
+    val classMap = classes.mapIndexed { index, s -> index to s }.toMap(HashBiMap())
+    val columnTruth = values.map { classMap.inverse[it]!! }.toIntArray()
+    val classifier = ovr(preProcessor.preparedDocuments, columnTruth, ::svmClassifier)
+    return Predictor(classifier, classMap)
+  }
+
+  private fun svmClassifier(x: Array<DoubleArray>, y: IntArray) = svm(x, y, LinearKernel(), 0.5)
 
   fun classify(name: String): ClassifiedRow {
     val preProcessedName = preProcessor.preProcess(name)
@@ -83,12 +85,12 @@ class Classifier(
 
 data class ClassifiableRow(
   val name: String,
-  val columns: List<String>
+  val columns: List<String>,
 )
 
 data class ClassifiedRow(
   val name: String,
-  val predictedColumns: List<String>
+  val predictedColumns: List<String>,
 )
 
 object BrStemmer : BrazilianStemmer() {
@@ -100,11 +102,13 @@ object BrStemmer : BrazilianStemmer() {
 
 class Predictor(
   private val classifier: SmileClassifier<DoubleArray>,
-  private val classes: List<String>
+  private val classes: BiMap<Int, String>,
 ) {
 
   fun predict(preProcessedName: DoubleArray): String {
     val predictedIndex = classifier.predict(preProcessedName)
-    return classes[predictedIndex]
+    return classes[predictedIndex]!!
   }
 }
+
+

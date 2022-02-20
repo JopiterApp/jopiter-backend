@@ -16,8 +16,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package app.jopiter.restaurants.repository.classifier
+package app.jopiter.restaurants.classifier
 
+import app.jopiter.restaurants.classifier.ClassifiableRow
+import app.jopiter.restaurants.classifier.Classifier
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.spec.style.funSpec
 import io.kotest.matchers.doubles.shouldBeGreaterThanOrEqual
@@ -26,7 +28,7 @@ import kotlin.random.Random
 fun classifierTest(csvName: String) = funSpec {
   context(csvName) {
     val datasetLines = "classified_items/$csvName.csv".loadCsv()
-    val rows = datasetLines.map { it.split(",") }.map {
+    val rows = datasetLines.map { it.split("|") }.map {
       val name = it[0]
       val columns = it.drop(1)
       ClassifiableRow(name, columns)
@@ -62,6 +64,7 @@ fun classifierTest(csvName: String) = funSpec {
 
 class ClassifierTests : FunSpec({
   include(classifierTest("protein"))
+  include(classifierTest("side_dish"))
   include(classifierTest("vegetarian"))
   include(classifierTest("dessert"))
 })
