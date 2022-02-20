@@ -20,19 +20,10 @@ package app.jopiter.restaurants.classifier
 
 import io.michaelrocks.bimap.BiMap
 import io.michaelrocks.bimap.HashBiMap
-import org.apache.lucene.analysis.br.BrazilianStemmer
 import smile.classification.ovr
 import smile.classification.svm
 import smile.math.kernel.LinearKernel
-import smile.nlp.bag
-import smile.nlp.tfidf
-import smile.nlp.vectorize
 import smile.classification.Classifier as SmileClassifier
-
-val PortugueseStopWords by lazy {
-  Classifier::class.java.classLoader.getResourceAsStream("classified_items/portuguese_stopwords.txt").reader()
-    .readText()
-}
 
 class Classifier(
   rows: List<ClassifiableRow>,
@@ -92,13 +83,6 @@ data class ClassifiedRow(
   val name: String,
   val predictedColumns: List<String>,
 )
-
-object BrStemmer : BrazilianStemmer() {
-
-  public override fun stem(term: String?): String {
-    return super.stem(term).orEmpty()
-  }
-}
 
 class Predictor(
   private val classifier: SmileClassifier<DoubleArray>,

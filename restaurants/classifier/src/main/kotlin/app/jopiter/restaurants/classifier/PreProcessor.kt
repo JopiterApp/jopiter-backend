@@ -4,9 +4,10 @@ import smile.nlp.bag
 import smile.nlp.tfidf
 import smile.nlp.vectorize
 
-class PreProcesser(
+// FIXME This class is only tested as part of ClassifierTests. We should create tests for it
+internal class PreProcesser(
   corpus: List<String>,
-  private val csvStopWords: String = PortugueseStopWords,
+  private val stopwordsProvider: StopwordsProvider = StopwordsProvider(),
   private val stemmer: BrStemmer = BrStemmer,
 ) {
 
@@ -18,7 +19,7 @@ class PreProcesser(
 
   fun preProcess(document: String) = vectorize(vocabulary, document.bagged())
 
-  private fun String.bagged() = bag(csvStopWords, stemmer::stem)
+  private fun String.bagged() = bag(stopwordsProvider.portugueseStopwordsCsv, stemmer::stem)
 
   private fun Map<String, Int>.vectorized() = vectorize(vocabulary, this)
 }
