@@ -34,6 +34,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
+    id("com.palantir.docker") version "0.32.0"
 }
 
 allprojects {
@@ -109,5 +110,18 @@ dependencies {
     implementation(project(":privacy"))
     implementation(project(":restaurants"))
     implementation(project(":timetable"))
+}
+
+tasks.named("docker") {
+    dependsOn(":installBootDist")
+}
+
+docker {
+    name = "${project.name}:${project.version}"
+    setDockerfile(project.file("docker/Dockerfile"))
+
+    files(tasks.installBootDist)
+    copySpec.from("docker/resources").into("resources")
+    buildArgs(mapOf("JAR_PATH" to "resources/lib/jopiter-backend.jar"))
 }
 
