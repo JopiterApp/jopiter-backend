@@ -1,0 +1,245 @@
+---
+openapi: 3.0.1
+info:
+  title: Jopiter Backend
+  description: API specification for the Jopiter App
+  license:
+    name: AGPL-3.0 License
+    url: https://github.com/JopiterApp/jopiter-backend/blob/master/LICENSE
+  version: 1.0.0
+servers:
+  - url: https://backend.jopiter.app
+    description: Generated server url
+paths:
+  "/":
+    post:
+      tags:
+        - timetable
+      summary: Fetch a timetable from JupitereWeb
+      description: Tries to login to user's account and obtain all information related
+        to their timetable
+      operationId: timetable
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TimetableRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Subject"
+        '401':
+          description: Unauthorized
+          content:
+            "*/*":
+              schema:
+                uniqueItems: true
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Subject"
+        '503':
+          description: Service Unavailable
+          content:
+            "*/*":
+              schema:
+                uniqueItems: true
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Subject"
+  "/privacy":
+    get:
+      tags:
+        - privacy
+      summary: Privacy Policy
+      description: JopiterApp privacy policy
+      operationId: privacy
+      responses:
+        '200':
+          description: Returns the privacy policy file
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/api/v1/restaurants":
+    get:
+      tags:
+        - restaurant
+      summary: List all restaurants and their campi
+      description: List all restaurants that are available, including to which campus
+        it belongs
+      operationId: list
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Campus"
+  "/api/v1/restaurants/items":
+    get:
+      tags:
+        - restaurant
+      summary: List Items
+      description: Retrieves all items for the chosen dates and restaurant
+      operationId: items
+      parameters:
+        - name: restaurantId
+          in: query
+          description: The restaurant ID as defined by /restaurants
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: date
+          in: query
+          description: The dates you want to fetch items for. ISO_LOCAL_DATE format
+            (yyyy-MM-dd)
+          required: true
+          schema:
+            uniqueItems: true
+            type: array
+            items:
+              type: string
+              format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/RestaurantItem"
+components:
+  schemas:
+    TimetableRequest:
+      required:
+        - password
+        - user
+      type: object
+      properties:
+        user:
+          type: string
+        password:
+          type: string
+    ClosedRangeLocalTime:
+      required:
+        - end
+        - start
+      type: object
+      properties:
+        start:
+          "$ref": "#/components/schemas/LocalTime"
+        end:
+          "$ref": "#/components/schemas/LocalTime"
+    LocalTime:
+      type: object
+      properties:
+        hour:
+          type: integer
+          format: int32
+        minute:
+          type: integer
+          format: int32
+        second:
+          type: integer
+          format: int32
+        nano:
+          type: integer
+          format: int32
+    Subject:
+      required:
+        - code
+        - dayOfWeek
+        - name
+        - time
+      type: object
+      properties:
+        dayOfWeek:
+          type: string
+          enum:
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+        code:
+          type: string
+        name:
+          type: string
+        time:
+          "$ref": "#/components/schemas/ClosedRangeLocalTime"
+    Campus:
+      required:
+        - campusName
+        - restaurants
+      type: object
+      properties:
+        campusName:
+          type: string
+          example: Cidade Universitária
+        restaurants:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Restaurant"
+    Restaurant:
+      required:
+        - id
+        - restaurantName
+      type: object
+      properties:
+        restaurantName:
+          type: string
+          example: Químicas
+        id:
+          type: integer
+          format: int32
+          example: 9
+    RestaurantItem:
+      required:
+        - date
+        - mundaneItems
+        - period
+        - restaurantId
+        - restaurantName
+        - unparsedMenu
+      type: object
+      properties:
+        restaurantId:
+          type: integer
+          format: int32
+        date:
+          type: string
+          format: date
+        period:
+          type: string
+          enum:
+            - Lunch
+            - Dinner
+        calories:
+          type: integer
+          format: int64
+        mainItem:
+          type: string
+        vegetarianItem:
+          type: string
+        dessertItem:
+          type: string
+        mundaneItems:
+          type: array
+          items:
+            type: string
+        unparsedMenu:
+          type: string
+        restaurantName:
+          type: string
