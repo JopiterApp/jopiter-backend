@@ -8,5 +8,5 @@ import org.apache.lucene.analysis.br.BrazilianStemmer
  * [BrazilianStemmer], but we need to use it.
  */
 object BrStemmer : BrazilianStemmer() {
-  public override fun stem(term: String): String = super.stem(term)
+  public override fun stem(term: String): String = super.stem(term).orEmpty()
 }

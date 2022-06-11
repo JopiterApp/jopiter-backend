@@ -1,5 +1,7 @@
 package app.jopiter.restaurants.classifier
 
+import kotlin.streams.toList
+
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class StopwordsProvider {
 
@@ -8,4 +10,4 @@ class StopwordsProvider {
   }
 }
 
-private fun portugueseStopwordsFile() = StopwordsProvider::class.java.classLoader.getResourceAsStream("portuguese_stopwords.txt")
+private fun portugueseStopwordsFile() = StopwordsProvider::class.java.classLoader.getResourceAsStream("portuguese_stopwords.txt")!!
