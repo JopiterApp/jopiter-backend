@@ -24,6 +24,9 @@ pluginManagement {
     }
 }
 
-rootProject.name = "jopiter-backend"
+rootProject.name = "jopiter"
 
-include("privacy", "restaurants", "timetable")
+include("privacy")
+include("restaurants", "restaurants:classifier")
+
+include("timetable")

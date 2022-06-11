@@ -21,23 +21,26 @@ apply(plugin = "kotlin-noarg")
 apply(plugin = "kotlin")
 
 repositories {
-    maven(url = "https://s3-us-west-2.amazonaws.com/dynamodb-local/release")
+  maven(url = "https://s3-us-west-2.amazonaws.com/dynamodb-local/release")
 }
 
 dependencies {
-    // Dynamo
-    implementation("software.amazon.awssdk:dynamodb-enhanced:2.16.29")
-    implementation("br.com.colman.dynamodb:kotlin-dynamodb-extensions:0.2.0")
-    testImplementation("com.amazonaws:DynamoDBLocal:1.13.5")
+  // Projects
+  implementation(project(":restaurants:classifier"))
 
-    // YearWeek
-    implementation("org.threeten:threeten-extra:1.6.0")
+  // Dynamo
+  implementation("software.amazon.awssdk:dynamodb-enhanced:2.16.29")
+  implementation("br.com.colman.dynamodb:kotlin-dynamodb-extensions:0.2.0")
+  testImplementation("com.amazonaws:DynamoDBLocal:1.13.5")
 
-    // Caffeine
-    implementation("com.github.ben-manes.caffeine:caffeine:3.0.1")
+  // YearWeek
+  implementation("org.threeten:threeten-extra:1.6.0")
+
+  // Caffeine
+  implementation("com.github.ben-manes.caffeine:caffeine:3.0.1")
 }
 
 configure<NoArgExtension> {
-    annotation("software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean")
-    invokeInitializers = true
+  annotation("software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean")
+  invokeInitializers = true
 }
