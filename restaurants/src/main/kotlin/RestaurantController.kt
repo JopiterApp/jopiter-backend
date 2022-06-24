@@ -18,6 +18,7 @@
 
 package app.jopiter.restaurants
 
+import app.jopiter.restaurants.classifier.RestaurantItemClassifier
 import app.jopiter.restaurants.model.Campus
 import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.repository.RestaurantItemRepository
@@ -39,6 +40,7 @@ import java.time.LocalDate
 @RequestMapping("\${api.base.path}/restaurants")
 class RestaurantController(
     private val restaurantItemRepository: RestaurantItemRepository,
+    private val restaurantItemClassifier: RestaurantItemClassifier
 ) {
 
     @Operation(
@@ -80,5 +82,5 @@ class RestaurantController(
     fun items(
         @RequestParam("restaurantId") restaurantId: Int,
         @RequestParam("date") @DateTimeFormat(iso = DATE) dates: Set<LocalDate>,
-    ) = restaurantItemRepository.get(restaurantId, dates)
+    ) = restaurantItemRepository.get(restaurantId, dates).map(restaurantItemClassifier::classify)
 }

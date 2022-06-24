@@ -101,7 +101,7 @@ data class Menu(
 )
 
 @Suppress("FunctionNaming")
-fun RestaurantItem(restaurantId: Int, date: LocalDate, period: Period, calories: Long?, menu: Menu) = menu.run {
+fun RestaurantItem(restaurantId: Int, date: LocalDate, period: Period, calories: Int?, menu: Menu) = menu.run {
     RestaurantItem(
         restaurantId, date, period, calories, mainItem, vegetarianItem, dessertItem, mundaneItems, unparsedMenu
     )

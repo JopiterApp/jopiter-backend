@@ -17,30 +17,38 @@
  */
 import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
 
-apply(plugin = "kotlin-noarg")
-apply(plugin = "kotlin")
-
-repositories {
-  maven(url = "https://s3-us-west-2.amazonaws.com/dynamodb-local/release")
+plugins {
+  kotlin("plugin.spring")
+  kotlin("plugin.jpa")
+  id("org.flywaydb.flyway") version "8.5.13"
 }
 
 dependencies {
   // Projects
   implementation(project(":restaurants:classifier"))
 
-  // Dynamo
-  implementation("software.amazon.awssdk:dynamodb-enhanced:2.16.29")
-  implementation("br.com.colman.dynamodb:kotlin-dynamodb-extensions:0.2.0")
-  testImplementation("com.amazonaws:DynamoDBLocal:1.13.5")
+  // SpringData
+  implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+
+  // KTORM
+  implementation("org.ktorm:ktorm-core:3.5.0")
+  implementation("org.ktorm:ktorm-support-postgresql:3.5.0")
+
+  // Postgres
+  implementation("org.postgresql:postgresql")
 
   // YearWeek
-  implementation("org.threeten:threeten-extra:1.6.0")
+  implementation("org.threeten:threeten-extra:1.7.0")
 
   // Caffeine
-  implementation("com.github.ben-manes.caffeine:caffeine:3.0.1")
+  implementation("com.github.ben-manes.caffeine:caffeine:3.1.1")
+
+  // FlywayDB
+  testImplementation("org.flywaydb:flyway-core:8.5.13")
 }
 
-configure<NoArgExtension> {
-  annotation("software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean")
-  invokeInitializers = true
+flyway {
+  url = System.getenv("JDBC_URL") ?: "jdbc:postgresql://localhost:5432/jopiter"
+  user = System.getenv("DATABASE_USER") ?: "jopiter"
+  password = System.getenv("DATABASE_PASS") ?: "password"
 }

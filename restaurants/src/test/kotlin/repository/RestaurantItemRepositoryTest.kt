@@ -20,7 +20,7 @@ package app.jopiter.restaurants.repository
 
 import app.jopiter.restaurants.model.Period.Lunch
 import app.jopiter.restaurants.model.RestaurantItem
-import app.jopiter.restaurants.repository.dynamo.DynamoRestaurantItemRepository
+import app.jopiter.restaurants.repository.postgres.PostgresRestaurantItemRepository
 import app.jopiter.restaurants.repository.usp.USPRestaurantItemRepository
 import io.kotest.core.spec.IsolationMode.InstancePerTest
 import io.kotest.core.spec.style.ShouldSpec
@@ -36,10 +36,10 @@ import java.time.LocalDate.now
 
 class RestaurantItemRepositoryTest : ShouldSpec({
 
-    val dynamoRepository = mockk<DynamoRestaurantItemRepository>(relaxed = true)
     val uspRepository = mockk<USPRestaurantItemRepository>()
+    val postgresRepository = mockk<PostgresRestaurantItemRepository>(relaxed = true)
 
-    val target = RestaurantItemRepository(dynamoRepository, uspRepository)
+    val target = RestaurantItemRepository(uspRepository, postgresRepository)
 
     listener(ConstantNowTestListener(now().with(WEDNESDAY)))
 
@@ -65,28 +65,28 @@ class RestaurantItemRepositoryTest : ShouldSpec({
         verify(exactly = 1) { uspRepository.fetch(1) }
     }
 
-    should("Try to fetch from DynamoDB if date is before current week") {
+    should("Try to fetch from Postgres if date is before current week") {
         val beforeCurrentWeek = now().with(MONDAY).minusDays(1)
 
-        every { dynamoRepository.get(1, beforeCurrentWeek) } returns setOf(dummyRestaurantItem(beforeCurrentWeek))
+        every { postgresRepository.get(1, beforeCurrentWeek) } returns setOf(dummyRestaurantItem(beforeCurrentWeek))
 
         target.get(1, setOf(beforeCurrentWeek)) shouldBe setOf(dummyRestaurantItem(beforeCurrentWeek))
 
         verify { uspRepository wasNot called }
-        verify(exactly = 1) { dynamoRepository.get(1, beforeCurrentWeek) }
+        verify(exactly = 1) { postgresRepository.get(1, beforeCurrentWeek) }
 
     }
 
-    should("Try to fetch from DynamoDB if USP returns empty") {
+    should("Try to fetch from Postgres if USP returns empty") {
         val today = now()
 
         every { uspRepository.fetch(1) } returns emptySet()
-        every { dynamoRepository.get(1, today) } returns setOf(dummyRestaurantItem(today))
+        every { postgresRepository.get(1, today) } returns setOf(dummyRestaurantItem(today))
 
         target.get(1, setOf(today)) shouldBe setOf(dummyRestaurantItem(today))
 
         verify(exactly = 1) { uspRepository.fetch(1) }
-        verify(exactly = 1) { dynamoRepository.get(1, today) }
+        verify(exactly = 1) { postgresRepository.get(1, today) }
 
     }
 
@@ -100,10 +100,10 @@ class RestaurantItemRepositoryTest : ShouldSpec({
         target.get(1, setOf(today, tomorrow)) shouldBe setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))
 
         verify(exactly = 1) { uspRepository.fetch(1) }
-        verify(exactly = 0) { dynamoRepository.get(any(), any()) }
+        verify(exactly = 0) { postgresRepository.get(any(), any()) }
     }
 
-    should("Save any value fetched from USP to DynamoDB") {
+    should("Save any value fetched from USP to Postgres") {
         val today = now()
         val tomorrow = today.plusDays(1)
 
@@ -111,7 +111,7 @@ class RestaurantItemRepositoryTest : ShouldSpec({
 
         target.get(1, setOf(today))
 
-        verify(exactly = 1) { dynamoRepository.put(setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))) }
+        verify(exactly = 1) { postgresRepository.put(setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))) }
     }
 
     isolationMode = InstancePerTest

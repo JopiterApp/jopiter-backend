@@ -24,8 +24,6 @@ import app.jopiter.restaurants.model.RestaurantItem
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.jackson.responseObject
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.context.annotation.Configuration
-import org.springframework.stereotype.Component
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
 import java.time.LocalDate.parse
@@ -70,5 +68,5 @@ class USPRestaurantItemRepository(
         val localDate: LocalDate by lazy { parse(date, ofPattern("dd/MM/yyyy")) }
     }
 
-    private data class MenuPeriod(val menu: String, val calories: Long? = null)
+    private data class MenuPeriod(val menu: String, val calories: Int? = null)
 }

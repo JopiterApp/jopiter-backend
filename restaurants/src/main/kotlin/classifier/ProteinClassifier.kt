@@ -32,27 +32,4 @@ data class ProteinClassification(
   val preparation: String,
   val cut: String,
   val color: String,
-) {
-
-  val foodGroupScore = when (val group = foodGroup.lowercase()) {
-    "ave" -> 2
-    "bovina" -> 1
-    "ovo" -> 2
-    "peixe" -> 2
-    "suina" -> 1
-    "processada" -> 0
-    else -> throw IllegalStateException("$group isn't expected here")
-  }
-
-  val preparationScore = when (val prep = preparation.lowercase()) {
-    "ao molho gorduroso" -> 1
-    "assado" -> 2
-    "cozido" -> 2
-    "frito" -> 0
-    "grelhado/refogado" -> 2
-    "ao molho leve" -> 2
-    else -> throw IllegalStateException("$preparation isn't expected here")
-  }
-
-
-}
+)

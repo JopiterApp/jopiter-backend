@@ -26,7 +26,7 @@ data class RestaurantItem(
     val restaurantId: Int,
     @JsonFormat(pattern = "yyyy-MM-dd", shape = STRING) val date: LocalDate,
     val period: Period,
-    val calories: Long?,
+    val calories: Int?,
     val mainItem: String?,
     val vegetarianItem: String?,
     val dessertItem: String?,
@@ -34,5 +34,3 @@ data class RestaurantItem(
     val unparsedMenu: String,
     val restaurantName: String = Restaurant.getById(restaurantId).name
 )
-
-enum class Period { Lunch, Dinner }

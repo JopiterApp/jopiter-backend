@@ -19,7 +19,7 @@
 package app.jopiter.restaurants.repository
 
 import app.jopiter.restaurants.model.RestaurantItem
-import app.jopiter.restaurants.repository.dynamo.DynamoRestaurantItemRepository
+import app.jopiter.restaurants.repository.postgres.PostgresRestaurantItemRepository
 import app.jopiter.restaurants.repository.usp.USPRestaurantItemRepository
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.springframework.stereotype.Repository
@@ -31,8 +31,8 @@ private typealias RestaurantKey = Pair<Int, LocalDate>
 
 @Repository
 class RestaurantItemRepository(
-    private val dynamoRestaurantItemRepository: DynamoRestaurantItemRepository,
-    private val uspRestaurantItemRepository: USPRestaurantItemRepository
+    private val uspRestaurantItemRepository: USPRestaurantItemRepository,
+    private val postgresRestaurantItemRepository: PostgresRestaurantItemRepository
 ) {
     private val cache = Caffeine
         .newBuilder()
@@ -43,7 +43,7 @@ class RestaurantItemRepository(
         dates.flatMap { cache.get(restaurantId to it).orEmpty() }.toSet()
 
     private fun fetch(restaurantId: Int, date: LocalDate) =
-        fetchFromUsp(restaurantId, date).ifEmpty { dynamoRestaurantItemRepository.get(restaurantId, date) }
+        fetchFromUsp(restaurantId, date).ifEmpty { postgresRestaurantItemRepository.get(restaurantId, date) }
 
     private fun fetchFromUsp(restaurantId: Int, date: LocalDate): Set<RestaurantItem> {
         val items = if (YearWeek.from(date) == YearWeek.now()) {
@@ -53,7 +53,7 @@ class RestaurantItemRepository(
         val (requested, extra) = items.partition { it.date == date }
 
         cache.putAll(extra.groupBy { it.restaurantId to it.date }.mapValues { it.value.toSet() })
-        dynamoRestaurantItemRepository.put(items)
+        postgresRestaurantItemRepository.put(items)
 
         return requested.toSet()
     }

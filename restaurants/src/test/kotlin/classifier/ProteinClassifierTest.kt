@@ -12,8 +12,8 @@ class ProteinClassifierTest : FunSpec({
 
     result shouldBe ProteinClassification("bovina", "ao molho leve", "alcatra, almôndega, bife de contra filé, bife de patinho, coxão duro, lagarto, patinho/coxão mole", "Marrom/Bege")
 
-    result.foodGroupScore shouldBe 1
-    result.preparationScore shouldBe 2
+    result.foodGroup shouldBe "bovina"
+    result.preparation shouldBe "ao molho leve"
   }
 
 })

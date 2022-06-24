@@ -21,20 +21,19 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
+version = "1.0.0"
 group = "app.jopiter"
 
 plugins {
     application
-    kotlin("jvm") version "1.5.20"
-    id("org.jetbrains.kotlin.plugin.noarg") version "1.5.20" apply false
+    kotlin("jvm") version "1.7.0"
+    kotlin("plugin.noarg") version "1.7.0" apply false
 
-    kotlin("plugin.spring") version "1.5.20"
-    id("org.springframework.boot") version "2.5.2"
+    kotlin("plugin.spring") version "1.7.0"
+    id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 
     id("io.gitlab.arturbosch.detekt") version "1.16.0"
-    id("com.palantir.docker") version "0.32.0"
 }
 
 allprojects {
@@ -47,23 +46,22 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
         maven(url = "https://jitpack.io")
     }
 
     dependencies {
         // Kotlin
-        implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.20")
+        implementation("org.jetbrains.kotlin:kotlin-reflect")
 
         // Spring
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-actuator")
-        implementation("org.springdoc:springdoc-openapi-ui:1.5.9")
-        implementation("org.springdoc:springdoc-openapi-kotlin:1.5.9")
-        implementation("org.springdoc:springdoc-openapi-webmvc-core:1.5.9")
+        implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
+        implementation("org.springdoc:springdoc-openapi-kotlin:1.6.9")
+        implementation("org.springdoc:springdoc-openapi-webmvc-core:1.6.9")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
-        testImplementation("io.kotest.extensions:kotest-extensions-spring:1.0.0")
+        testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.1")
 
 
         // Fuel
@@ -72,12 +70,17 @@ allprojects {
         implementation("com.github.kittinunf.fuel:fuel-coroutines:2.3.1")
 
         // Kotest
-        testImplementation("io.kotest:kotest-runner-junit5:4.6.1")
-        testImplementation("io.kotest:kotest-assertions-json:4.6.1")
-        testImplementation("io.kotest:kotest-property:4.6.1")
+        testImplementation("io.kotest:kotest-runner-junit5:5.3.1")
+        testImplementation("io.kotest:kotest-assertions-json:5.3.1")
+        testImplementation("io.kotest:kotest-property:5.3.1")
+
+        // Kotest + TestContainers
+        testImplementation("io.kotest.extensions:kotest-extensions-testcontainers:1.3.3")
+        testImplementation("org.testcontainers:testcontainers:1.17.2")
+        testImplementation("org.testcontainers:postgresql:1.17.2")
 
         // Mockk
-        testImplementation("io.mockk:mockk:1.11.0")
+        testImplementation("io.mockk:mockk:1.12.4")
 
         // Mock Server
         testImplementation("org.mock-server:mockserver-netty:5.11.2") {
@@ -111,17 +114,3 @@ dependencies {
     implementation(project(":restaurants"))
     implementation(project(":timetable"))
 }
-
-tasks.named("docker") {
-    dependsOn(":installBootDist")
-}
-
-docker {
-    name = "${project.name}:${project.version}"
-    setDockerfile(project.file("docker/Dockerfile"))
-
-    files(tasks.installBootDist)
-    copySpec.from("docker/resources").into("resources")
-    buildArgs(mapOf("JAR_PATH" to "resources/lib/jopiter-backend.jar"))
-}
-

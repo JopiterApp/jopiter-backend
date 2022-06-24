@@ -38,6 +38,7 @@ import java.time.DayOfWeek.SATURDAY
 import java.time.DayOfWeek.THURSDAY
 import java.time.DayOfWeek.TUESDAY
 import java.time.DayOfWeek.WEDNESDAY
+import java.time.Duration
 import java.time.LocalTime
 import java.time.LocalTime.MAX
 import java.time.LocalTime.MIN
@@ -88,7 +89,7 @@ class TimetableRepository(
 
     private fun firefoxDriver() = FirefoxDriver(FirefoxOptions().setHeadless(false))
 
-    private fun <T> FirefoxDriver.waiting(block: () -> T?) = WebDriverWait(this, 10).until { block() }!!
+    private fun <T> FirefoxDriver.waiting(block: () -> T?) = WebDriverWait(this, Duration.ofSeconds(10)).until { block() }!!
 
     @Suppress("LongParameterList")
     inner class TimetableRow(
