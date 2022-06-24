@@ -10,3 +10,8 @@ services:
       POSTGRES_PASSWORD: "password"
       POSTGRES_USER: "jopiter"
       POSTGRES_DB: "jopiter"
+  jopiter:
+    container_name: jopiter_backend
+    image: docker.io/library/jopiter:1.1.0
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/jopiter
