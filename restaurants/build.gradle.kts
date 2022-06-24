@@ -30,6 +30,9 @@ dependencies {
   // SpringData
   implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 
+  // FlywayDB
+  implementation("org.flywaydb:flyway-core:8.5.13")
+
   // KTORM
   implementation("org.ktorm:ktorm-core:3.5.0")
   implementation("org.ktorm:ktorm-support-postgresql:3.5.0")
@@ -42,9 +45,6 @@ dependencies {
 
   // Caffeine
   implementation("com.github.ben-manes.caffeine:caffeine:3.1.1")
-
-  // FlywayDB
-  testImplementation("org.flywaydb:flyway-core:8.5.13")
 }
 
 flyway {
