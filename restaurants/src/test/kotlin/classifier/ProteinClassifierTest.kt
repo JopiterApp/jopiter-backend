@@ -17,6 +17,3 @@ class ProteinClassifierTest : FunSpec({
   }
 
 })
-
-private fun String.loadCsv() =
-  ProteinClassifierTest::class.java.classLoader.getResourceAsStream(this)!!
