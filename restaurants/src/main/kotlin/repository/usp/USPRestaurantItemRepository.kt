@@ -45,7 +45,7 @@ class USPRestaurantItemRepository(
             .responseObject<MenuResponse>()
 
         return result.fold(
-            { it.toRestaurantItems(restaurantId, parsers[restaurantId]!!) },
+            { it.toRestaurantItems(restaurantId, parsers[restaurantId] ?: throw IllegalStateException("No available parsers for $restaurantId")) },
             { if (it.causedByInterruption) emptySet() else throw it }
         )
     }

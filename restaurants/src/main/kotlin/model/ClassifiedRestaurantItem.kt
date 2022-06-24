@@ -12,7 +12,7 @@ data class ClassifiedRestaurantItem(
   val calories: Int?,
   val mainItem: ProteinItem?,
   val vegetarianItem: VegetarianItem?,
-  val dessertItem: String?,
+  val dessertItem: DessertItem?,
   val mundaneItems: List<String>,
   val unparsedMenu: String,
   val restaurantName: String

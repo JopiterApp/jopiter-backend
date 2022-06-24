@@ -11,24 +11,38 @@ import org.ktorm.entity.map
 import org.ktorm.entity.sequenceOf
 import org.ktorm.entity.toList
 import org.ktorm.entity.toSet
+import org.ktorm.entity.update
 import org.ktorm.schema.Table
 import org.ktorm.schema.date
 import org.ktorm.schema.enum
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
+import org.ktorm.support.postgresql.insertOrUpdate
 import org.ktorm.support.postgresql.textArray
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Repository
 import java.time.LocalDate
 
+@Repository
 class PostgresRestaurantItemRepository(
   private val database: Database,
 ) {
 
+  private val logger = LoggerFactory.getLogger(this::class.java)
+
   private val restaurantItems = database.sequenceOf(RestaurantItems)
 
-  fun put(items: Collection<RestaurantItem>) = items.forEach { restaurantItems.add(it.toEntity()) }
+  fun put(items: Collection<RestaurantItem>) = items.forEach(::put)
 
   fun put(restaurantItem: RestaurantItem) {
-    restaurantItems.add(restaurantItem.toEntity())
+    val items = get(restaurantItem.restaurantId, restaurantItem.date)
+
+
+    if(get(restaurantItem.restaurantId, restaurantItem.date).isEmpty()) {
+      restaurantItems.add(restaurantItem.toEntity())
+    } else {
+      restaurantItems.update(restaurantItem.toEntity())
+    }
   }
 
   fun get(restaurantId: Int, date: LocalDate): Set<RestaurantItem> = restaurantItems
@@ -39,10 +53,10 @@ class PostgresRestaurantItemRepository(
 }
 
 object RestaurantItems : Table<RestaurantItemEntity>("restaurant_item") {
-  val restaurantId = int("restaurant_id").bindTo { it.restaurantId }
+  val restaurantId = int("restaurant_id").primaryKey().bindTo { it.restaurantId }
   val restaurantName = varchar("restaurant_name").bindTo { it.restaurantName }
-  val date = date("date").bindTo { it.date }
-  val period = enum<Period>("period").bindTo { it.period }
+  val date = date("date").primaryKey().bindTo { it.date }
+  val period = enum<Period>("period").primaryKey().bindTo { it.period }
   val calories = int("calories").bindTo { it.calories }
   val mainItem = varchar("main_item").bindTo { it.mainItem }
   val vegetarianItem = varchar("vegetarian_item").bindTo { it.vegetarianItem }

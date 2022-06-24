@@ -1,6 +1,9 @@
 package app.jopiter.restaurants.classifier
 
 import app.jopiter.restaurants.model.ClassifiedRestaurantItem
+import app.jopiter.restaurants.model.DessertFoodGroup
+import app.jopiter.restaurants.model.DessertItem
+import app.jopiter.restaurants.model.DessertPreparation
 import app.jopiter.restaurants.model.ProteinFoodGroup
 import app.jopiter.restaurants.model.ProteinPreparation
 import app.jopiter.restaurants.model.ProteinItem
@@ -14,7 +17,8 @@ import org.springframework.stereotype.Component
 @Component
 class RestaurantItemClassifier(
   private val proteinClassifier: ProteinClassifier,
-  private val vegetarianClassifier: VegetarianClassifier
+  private val vegetarianClassifier: VegetarianClassifier,
+  private val dessertClassifier: DessertClassifier
 ) {
 
   fun classify(restaurantItem: RestaurantItem): ClassifiedRestaurantItem {
@@ -25,7 +29,7 @@ class RestaurantItemClassifier(
       restaurantItem.calories,
       restaurantItem.mainItem?.let { classifyProtein(it) },
       restaurantItem.vegetarianItem?.let { classifyVegetarian(it) },
-      restaurantItem.dessertItem,
+      restaurantItem.dessertItem?.let { classifyDessert(it) },
       restaurantItem.mundaneItems,
       restaurantItem.unparsedMenu,
       restaurantItem.restaurantName
@@ -33,13 +37,18 @@ class RestaurantItemClassifier(
   }
 
   private fun classifyProtein(item: String): ProteinItem {
-    val proteinClassification = proteinClassifier.classify(item)
-    return ProteinItem(item, ProteinFoodGroup.find(proteinClassification.foodGroup), ProteinPreparation.find(proteinClassification.preparation))
+    val classification = proteinClassifier.classify(item)
+    return ProteinItem(item, ProteinFoodGroup.find(classification.foodGroup), ProteinPreparation.find(classification.preparation))
   }
 
   private fun classifyVegetarian(item: String): VegetarianItem {
-    val vegetarianClassification = vegetarianClassifier.classify(item)
-    return VegetarianItem(item, VegetarianFoodGroup.find(vegetarianClassification.foodGroup), VegetarianPreparation.find(vegetarianClassification.preparation))
+    val classification = vegetarianClassifier.classify(item)
+    return VegetarianItem(item, VegetarianFoodGroup.find(classification.foodGroup), VegetarianPreparation.find(classification.preparation))
+  }
+
+  private fun classifyDessert(item: String): DessertItem {
+    val classification = dessertClassifier.classify(item)
+    return DessertItem(item, DessertFoodGroup.find(classification.foodGroup), DessertPreparation.find(classification.preparation))
   }
 
 }

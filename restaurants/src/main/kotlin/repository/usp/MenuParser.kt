@@ -119,4 +119,4 @@ val parsers: Map<Int, MenuParser> = mapOf(
     9 to centralParser,
     19 to centralRibeiraoParser,
     20 to bauruParser
-) + listOf(3, 4, 7, 8, 10, 11, 12, 13, 14, 17).map { it to closedMenuParser }
+) + listOf(3, 4, 7, 8, 10, 11, 12, 13, 14, 17, 23).map { it to closedMenuParser }

@@ -20,6 +20,7 @@ package app.jopiter.restaurants
 
 import app.jopiter.restaurants.classifier.RestaurantItemClassifier
 import app.jopiter.restaurants.model.Campus
+import app.jopiter.restaurants.model.ClassifiedRestaurantItem
 import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.repository.RestaurantItemRepository
 import io.swagger.v3.oas.annotations.Operation
@@ -73,7 +74,7 @@ class RestaurantController(
 
         responses = [
             ApiResponse(responseCode = "200", content = [
-                Content(array = ArraySchema(schema = Schema(implementation = RestaurantItem::class)),
+                Content(array = ArraySchema(schema = Schema(implementation = ClassifiedRestaurantItem::class)),
                     mediaType = "application/json")
             ])
         ]

@@ -11,7 +11,7 @@ enum class ProteinFoodGroup(val foodGroup: String, val score: Int) {
   Bovina("bovina", 1),
   Ovo("ovo", 2),
   Peixe("peixe", 2),
-  Suina("suina", 1),
+  Suina("suína", 1),
   Processada("processada", 0);
 
   companion object {
