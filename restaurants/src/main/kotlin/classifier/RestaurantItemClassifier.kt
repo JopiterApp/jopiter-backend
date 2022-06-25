@@ -36,17 +36,17 @@ class RestaurantItemClassifier(
     )
   }
 
-  private fun classifyProtein(item: String): ProteinItem {
+  fun classifyProtein(item: String): ProteinItem {
     val classification = proteinClassifier.classify(item)
     return ProteinItem(item, ProteinFoodGroup.find(classification.foodGroup), ProteinPreparation.find(classification.preparation))
   }
 
-  private fun classifyVegetarian(item: String): VegetarianItem {
+  fun classifyVegetarian(item: String): VegetarianItem {
     val classification = vegetarianClassifier.classify(item)
     return VegetarianItem(item, VegetarianFoodGroup.find(classification.foodGroup), VegetarianPreparation.find(classification.preparation))
   }
 
-  private fun classifyDessert(item: String): DessertItem {
+  fun classifyDessert(item: String): DessertItem {
     val classification = dessertClassifier.classify(item)
     return DessertItem(item, DessertFoodGroup.find(classification.foodGroup), DessertPreparation.find(classification.preparation))
   }
