@@ -24,6 +24,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
+import io.swagger.v3.oas.models.servers.Server
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
@@ -53,6 +54,9 @@ class JopiterApplication {
                 .url("https://github.com/JopiterApp/jopiter-backend/blob/master/LICENSE")
             )
         )
+      .addServersItem(
+        Server().description("Production").url("https://v2.backend.jopiter.app")
+      )
 }
 
 fun main() {
