@@ -21,7 +21,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-version = "2.2.0"
+version = "2.2.1"
 group = "app.jopiter"
 
 plugins {

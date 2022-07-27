@@ -43,24 +43,12 @@ class RestaurantItemRepositoryTest : ShouldSpec({
 
     listener(ConstantNowTestListener(now().with(WEDNESDAY)))
 
-    should("Fetch from USP when cache is empty and date is in current week") {
+    should("Fetch from USP when date is in current week") {
         val today = now()
 
         every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today))
 
         target.get(1, setOf(today)) shouldBe setOf(dummyRestaurantItem(today))
-
-        verify(exactly = 1) { uspRepository.fetch(1) }
-    }
-
-    should("Fetch from Cache when value was already fetched from USP") {
-        val today = now()
-
-        every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today))
-
-        repeat(2) {
-            target.get(1, setOf(today)) shouldBe setOf(dummyRestaurantItem(today))
-        }
 
         verify(exactly = 1) { uspRepository.fetch(1) }
     }
@@ -88,19 +76,6 @@ class RestaurantItemRepositoryTest : ShouldSpec({
         verify(exactly = 1) { uspRepository.fetch(1) }
         verify(exactly = 1) { postgresRepository.get(1, today) }
 
-    }
-
-    should("Keep in cache all values returned from USP") {
-        val today = now()
-        val tomorrow = today.plusDays(1)
-
-        every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))
-
-        target.get(1, setOf(today)) shouldBe setOf(dummyRestaurantItem(today))
-        target.get(1, setOf(today, tomorrow)) shouldBe setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))
-
-        verify(exactly = 1) { uspRepository.fetch(1) }
-        verify(exactly = 0) { postgresRepository.get(any(), any()) }
     }
 
     should("Save any value fetched from USP to Postgres") {
