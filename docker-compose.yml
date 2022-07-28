@@ -4,15 +4,15 @@ services:
   postgres:
     container_name: jopiter_postgres
     image: postgres
-    ports:
-      - "5432:5432"
+    expose:
+      - "5432"
     environment:
       POSTGRES_PASSWORD: "password"
       POSTGRES_USER: "jopiter"
       POSTGRES_DB: "jopiter"
   jopiter:
     container_name: jopiter_backend
-    image: docker.io/library/jopiter:2.0.0
+    image: docker.io/library/jopiter:2.2.1
     depends_on:
       - postgres
     environment:
