@@ -24,30 +24,24 @@ import com.github.kittinunf.fuel.jackson.responseObject
 import io.kotest.core.annotation.Tags
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.shouldExist
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldBeSameSizeAs
 import io.kotest.matchers.shouldBe
-import java.lang.System.getenv
 
 @Tags("Daily")
 class RestaurantTest : FunSpec({
 
-    test("Restaurants model reflects what USP returns") {
-        val restaurantsReturnedByUSP = "https://uspdigital.usp.br/rucard/servicos/restaurants".httpPost()
-            .header(Headers.CONTENT_TYPE, "application/x-www-form-urlencoded")
-            .body("hash=${getenv("USP_RESTAURANT_HASH")}")
-            .responseObject<List<RestaurantGroup>>().third.get()
+    context("Restaurants model reflects what USP returns") {
+        val restaurantGroups = fetchRestaurantGroupsFromUSP()
 
-        with(restaurantsReturnedByUSP) {
-            Campus.values() shouldHaveSize size
+        test("Should have same number of campi") {
+            Campus.values() shouldBeSameSizeAs restaurantGroups
+        }
 
-            forEach { group ->
-                val campus = Campus.values().single { it.campusName == group.name }
-                group.restaurants.forAll { restaurant ->
-                    campus.restaurants.shouldExist { it.id == restaurant.id && it.restaurantName == restaurant.alias }
-                }
+        test("Should have a 1 to 1 mapping between USP's response and our model") {
+            val allRestaurants = restaurantGroups.flatMap { it.restaurants }
+            allRestaurants.forAll { (alias, id) ->
+                Restaurant.getById(id).restaurantName shouldBe alias
             }
-
         }
     }
 
@@ -56,6 +50,12 @@ class RestaurantTest : FunSpec({
         Restaurant.getById(restaurant.id) shouldBe restaurant
     }
 })
+
+private fun fetchRestaurantGroupsFromUSP() =
+    "https://uspdigital.usp.br/rucard/servicos/restaurants".httpPost()
+        .header(Headers.CONTENT_TYPE, "application/x-www-form-urlencoded")
+        .body("hash=596df9effde6f877717b4e81fdb2ca9f")
+        .responseObject<List<RestaurantGroup>>().third.get()
 
 data class RestaurantGroup(val name: String, val restaurants: List<IndividualRestaurant>)
 data class IndividualRestaurant(val alias: String, val id: Int)

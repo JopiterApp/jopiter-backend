@@ -78,10 +78,10 @@ private interface RestaurantSer {
 enum class Restaurant(val id: Int, val restaurantName: String) {
 
     // Cidade Universitária
-    Central(6, "Central"),
-    PuSPC(7, "PUSP-C"),
-    Fisica(8, "Física"),
-    Quimicas(9, "Químicas"),
+    Central(6, "Central - Campus Butantã"),
+    PuSPC(7, "PUSP-C - Campus Butantã"),
+    Fisica(8, "Física - Campus Butantã"),
+    Quimicas(9, "Químicas - Campus Butantã"),
 
     // Quatrilátero Saúde
     EscolaDeEnfermagem(12, "Escola de Enfermagem"),
@@ -108,7 +108,7 @@ enum class Restaurant(val id: Int, val restaurantName: String) {
     RestauranteArea2(3, "Restaurante área 2"),
 
     // Ribeirão
-    CentralRibeirao(19, "Restaurante Central"),
+    CentralRibeirao(19, "Restaurante Central -Campus RP"),
 
     // Lorena
     Eel1(17, "EEL - Área I"),
