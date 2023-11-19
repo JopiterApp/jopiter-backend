@@ -80,7 +80,7 @@ allprojects {
         testImplementation("org.testcontainers:postgresql:1.17.2")
 
         // Mockk
-        testImplementation("io.mockk:mockk:1.12.4")
+        testImplementation("io.mockk:mockk:1.13.8")
 
         // Mock Server
         testImplementation("org.mock-server:mockserver-netty:5.11.2") {
