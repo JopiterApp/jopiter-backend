@@ -30,45 +30,87 @@ fun interface MenuParser {
 }
 
 val luizDeQueirozParser = MenuParser {
-        val items = it.cleanItems()
-        val (main, veg, dessert) = items.find("Prato principal:", "Prato principal Vegetariano:", "Sobremesa:")
-        Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
+    val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
+    val (main, veg, dessert) = items.find("Prato principal:", "Opção Vegetariana:", "Sobremesa:")
+    Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
 }
 
 val centralSaoCarlosParser = MenuParser {
     val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
     val (veg, dessert) = items.find("principal:", "Sobremesa:")
     val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
     Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
 }
 
-val piracicabaParser = MenuParser {
+val pirassunungaParser = MenuParser {
     val items = it.cleanItems()
-    val (main, veg) = items.find("Prato Principal:", "Opção Vegetariana:")
-    Menu(main, veg, null, items.cleanStrings(main, veg), it)
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
+    val (main, veg, des) = items.find("Prato Principal:", "Opção Vegetariana:", "Sobremesa:")
+    Menu(main, veg, des, items.cleanStrings(main, veg, des), it)
 }
 
 val centralParser = MenuParser {
     val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
     val veg = items.find("Opção:").single()
     val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
-    val dessert = items.getOrNull(items.lastIndex - 1)?.cleanString()
+    val dessert = items.getOrNull(items.lastIndex - 2)?.cleanString()
+    Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
+}
+
+val quadrilateroParser = MenuParser {
+    val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
+    val veg = items.find("Opção:").single()
+    val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
+    val dessert = items.getOrNull(items.lastIndex - 3)?.cleanString()
+    Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
+}
+
+val eachParser = MenuParser {
+    val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
+    val veg = items.find("Opção:").single()
+    val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
+    val dessert = items.getOrNull(items.lastIndex - 4)?.cleanString()
+    Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
+}
+
+val largoSaoFranciscoParser = MenuParser {
+    val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
+    val veg = items.find("Opção:").single()
+    val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
+    val dessert = items.getOrNull(items.lastIndex - 3)?.cleanString()
     Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
 }
 
 val centralRibeiraoParser = MenuParser {
     val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
     val veg = items.find("veg:").single()
-    val dessert = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
-    val main = items.getOrNull(items.findIndex(dessert) - 2)?.cleanString()
-    Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
+    val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
+    val des = items.getOrNull(items.lastIndex - 4)?.cleanString()
+    Menu(main, veg, des, items.cleanStrings(main, veg, des), it)
 }
 
 val bauruParser = MenuParser {
     val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
     val main = items[0].cleanString()
     val veg = items[1].cleanString()
-    val dessert = items[items.lastIndex - 2].cleanString()
+    val dessert = items[items.lastIndex - 1].cleanString()
+    Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
+}
+
+val lorenaParser = MenuParser {
+    val items = it.cleanItems()
+    if(items.size < 3) return@MenuParser closedMenuParser.parse(it)
+    val veg = items.find("Opção:").single()
+    val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
+    val dessert = items.getOrNull(items.lastIndex - 2)?.cleanString()
     Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
 }
 
@@ -83,8 +125,10 @@ private fun List<String>.cleanStrings(vararg specialItems: String?) =
     (map { it.cleanString() } - specialItems.toSet()).filterNot { it.isNullOrBlank() }.filterNotNull()
 
 private fun String.cleanItems() =
-    split("\n", "/")
+    replace("\n(", " (")
+        .split("\n", "/")
         .map { it.replace(Regex("[()]*\\d*,*\\.*\\d*\\s*kcal[(())]*", IGNORE_CASE), "") }
+        .map { it.trim(',') }
         .filter { it.isNotBlank() }
         .filterNot { it.contains("Marmitex", true) }
 
@@ -114,9 +158,18 @@ fun RestaurantItem(restaurantId: Int, date: LocalDate, period: Period, calories:
 val parsers: Map<Int, MenuParser> = mapOf(
     1 to luizDeQueirozParser,
     2 to centralSaoCarlosParser,
-    5 to piracicabaParser,
+    3 to centralSaoCarlosParser,
+    5 to pirassunungaParser,
     6 to centralParser,
+    7 to centralParser,
+    8 to centralParser,
     9 to centralParser,
+    11 to quadrilateroParser,
+    12 to quadrilateroParser,
+    13 to eachParser,
+    14 to largoSaoFranciscoParser,
+    17 to lorenaParser,
     19 to centralRibeiraoParser,
-    20 to bauruParser
-) + listOf(3, 4, 7, 8, 10, 11, 12, 13, 14, 17, 23).map { it to closedMenuParser }
+    20 to bauruParser,
+    23 to lorenaParser,
+) + listOf(4, 10).map { it to closedMenuParser }
