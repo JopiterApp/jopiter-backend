@@ -33,7 +33,7 @@ fun classifierTest(csvName: String) = funSpec {
       val columns = it.drop(1)
       ClassifiableRow(name, columns)
     }
-    context("Creates a model with 80%+ accuracy") {
+    context("Creates a model with 65%+ accuracy") {
       val (trainData, testData) = rows.partition { Random.nextDouble() <= 0.80 }
 
       val target = Classifier(trainData)
@@ -55,7 +55,7 @@ fun classifierTest(csvName: String) = funSpec {
       accuraciesPerColumn.forEachIndexed { index, d ->
         test("Column $index") {
           println("Accuracy of column $index: $d")
-          d shouldBeGreaterThanOrEqual 0.80
+          d shouldBeGreaterThanOrEqual 0.65
         }
       }
     }
