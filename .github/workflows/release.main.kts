@@ -40,7 +40,7 @@ workflow(
             action = BuildPushActionV5(
                 context = ".",
                 push = true,
-                tags = listOf("$dockerNamespace/latest", "$dockerNamespace/$version")
+                tags = listOf("$dockerNamespace:latest", "$dockerNamespace:$version")
             )
         )
     }
