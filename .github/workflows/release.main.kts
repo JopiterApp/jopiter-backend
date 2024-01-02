@@ -8,20 +8,20 @@ import io.github.typesafegithub.workflows.actions.azure.DockerLoginV1
 import io.github.typesafegithub.workflows.actions.docker.BuildPushActionV5
 import io.github.typesafegithub.workflows.actions.gradle.GradleBuildActionV2
 import io.github.typesafegithub.workflows.domain.RunnerType.UbuntuLatest
-import io.github.typesafegithub.workflows.domain.triggers.Release
+import io.github.typesafegithub.workflows.domain.triggers.Push
 import io.github.typesafegithub.workflows.dsl.expressions.Contexts
 import io.github.typesafegithub.workflows.dsl.expressions.expr
 import io.github.typesafegithub.workflows.dsl.workflow
 import io.github.typesafegithub.workflows.yaml.writeToFile
 
-val version = expr { Contexts.github.ref }
+val version = expr { Contexts.github.ref_name }
 val DOCKER_HUB_USERNAME by Contexts.secrets
 val DOCKER_HUB_TOKEN by Contexts.secrets
 val dockerNamespace = "jopiterapp/jopiter-backend"
 
 workflow(
     name = "Release",
-    on = listOf(Release()),
+    on = listOf(Push(tags = listOf("*"))),
     sourceFile = __FILE__.toPath()
 ) {
     job(id = "Release", runsOn = UbuntuLatest) {

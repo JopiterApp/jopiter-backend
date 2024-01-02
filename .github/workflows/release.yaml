@@ -4,7 +4,9 @@
 
 name: 'Release'
 on:
-  release: {}
+  push:
+    tags:
+    - '*'
 jobs:
   check_yaml_consistency:
     name: 'Check YAML consistency'
@@ -52,4 +54,4 @@ jobs:
         push: 'true'
         tags: |-
           jopiterapp/jopiter-backend:latest
-          jopiterapp/jopiter-backend:${{ github.ref }}
+          jopiterapp/jopiter-backend:${{ github.ref_name }}
