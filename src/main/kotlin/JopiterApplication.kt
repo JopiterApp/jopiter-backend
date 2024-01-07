@@ -55,7 +55,7 @@ class JopiterApplication {
             )
         )
       .addServersItem(
-        Server().description("Production").url("https://v4.backend.jopiter.app")
+        Server().description("Production").url("https://persephone.jopiter.app")
       )
 }
 
