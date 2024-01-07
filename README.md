@@ -3,7 +3,7 @@
 This project contains all the source code for Jopiter's backend. Every file is released under the [GNU Affero General Public License v3.0 or later](LICENSE), unless stated otherwise.
 
 ## Production
-Current production environment can be found at https://v4.backend.jopiter.app/api/v1/docs/swagger
+Current production environment can be found at https://persephone.jopiter.app/api/v1/docs/swagger
 
   
 ## Want to Contribute?
