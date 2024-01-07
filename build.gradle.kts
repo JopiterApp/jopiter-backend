@@ -27,14 +27,13 @@ group = "app.jopiter"
 
 plugins {
     application
-    kotlin("jvm") version "1.7.0"
-    kotlin("plugin.noarg") version "1.7.0" apply false
+    kotlin("jvm") version "1.9.21"
+    kotlin("plugin.noarg") version "1.9.21" apply false
 
-    kotlin("plugin.spring") version "1.7.0"
-    id("org.springframework.boot") version "2.7.0"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    kotlin("plugin.spring") version "1.9.21"
+    id("org.springframework.boot") version "3.2.1"
 
-    id("io.gitlab.arturbosch.detekt") version "1.16.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
 }
 
 allprojects {
@@ -51,16 +50,12 @@ allprojects {
     }
 
     dependencies {
-        // Kotlin
-        implementation("org.jetbrains.kotlin:kotlin-reflect")
-
         // Spring
         implementation("org.springframework.boot:spring-boot-starter")
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-actuator")
-        implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
-        implementation("org.springdoc:springdoc-openapi-kotlin:1.6.9")
-        implementation("org.springdoc:springdoc-openapi-webmvc-core:1.6.9")
+        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.1")
 
@@ -105,7 +100,7 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = "11"
+            jvmTarget = "17"
         }
     }
 }
