@@ -88,6 +88,7 @@ allprojects {
     }
 
     tasks.withType<Test> {
+        jvmArgs("--add-opens=java.base/java.time=ALL-UNNAMED")
         useJUnitPlatform()
         testLogging {
             showExceptions = true
