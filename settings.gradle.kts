@@ -24,7 +24,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "jopiter"
+rootProject.name = "jopiter-backend"
 
 include("privacy")
 include("restaurants", "restaurants:classifier")
