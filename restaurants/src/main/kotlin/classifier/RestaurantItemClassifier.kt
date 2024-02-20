@@ -11,8 +11,8 @@ import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.model.VegetarianFoodGroup
 import app.jopiter.restaurants.model.VegetarianItem
 import app.jopiter.restaurants.model.VegetarianPreparation
+import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Component
-
 
 @Component
 class RestaurantItemClassifier(
@@ -20,6 +20,13 @@ class RestaurantItemClassifier(
   private val vegetarianClassifier: VegetarianClassifier,
   private val dessertClassifier: DessertClassifier
 ) {
+
+  @PostConstruct
+  fun warmupModel() {
+    classifyProtein("Frango assado")
+    classifyVegetarian("Feijoada vegetariana")
+    classifyDessert("Paçoca")
+  }
 
   fun classify(restaurantItem: RestaurantItem): ClassifiedRestaurantItem {
     return ClassifiedRestaurantItem(
