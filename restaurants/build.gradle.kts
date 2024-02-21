@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
 plugins {
   kotlin("plugin.spring")
   kotlin("plugin.jpa")
-  id("org.flywaydb.flyway") version "8.5.13"
+  id("org.flywaydb.flyway") version "9.22.3"
 }
 
 dependencies {
@@ -31,7 +31,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 
   // FlywayDB
-  implementation("org.flywaydb:flyway-core:8.5.13")
+  implementation("org.flywaydb:flyway-core:9.22.3")
 
   // KTORM
   implementation("org.ktorm:ktorm-core:3.5.0")
