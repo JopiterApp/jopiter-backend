@@ -35,10 +35,9 @@ class PostgresRestaurantItemRepository(
   fun put(items: Collection<RestaurantItem>) = items.forEach(::put)
 
   fun put(restaurantItem: RestaurantItem) {
-    val items = get(restaurantItem.restaurantId, restaurantItem.date)
+    val items = get(restaurantItem.restaurantId, restaurantItem.date, restaurantItem.period)
 
-
-    if(get(restaurantItem.restaurantId, restaurantItem.date).isEmpty()) {
+    if(items.isEmpty()) {
       restaurantItems.add(restaurantItem.toEntity())
     } else {
       restaurantItems.update(restaurantItem.toEntity())
@@ -48,6 +47,13 @@ class PostgresRestaurantItemRepository(
   fun get(restaurantId: Int, date: LocalDate): Set<RestaurantItem> = restaurantItems
     .filter { it.date eq date }
     .filter { it.restaurantId eq restaurantId }
+    .map { it.toItem() }
+    .toSet()
+
+  fun get(restaurantId: Int, date: LocalDate, period: Period): Set<RestaurantItem> = restaurantItems
+    .filter { it.date eq date }
+    .filter { it.restaurantId eq restaurantId }
+    .filter { it.period eq period }
     .map { it.toItem() }
     .toSet()
 }
