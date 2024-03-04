@@ -33,7 +33,7 @@ class RestaurantItemRepository(
     fun get(restaurantId: Int, dates: Set<LocalDate>) = dates.flatMap { fetch(restaurantId, it) }.toSet()
 
     private fun fetch(restaurantId: Int, date: LocalDate) =
-          fetchFromUsp(restaurantId, date).ifEmpty { fetchFromPostgres(restaurantId, date) }
+          fetchFromPostgres(restaurantId, date).ifEmpty { fetchFromUsp(restaurantId, date) }
 
     private fun fetchFromUsp(restaurantId: Int, date: LocalDate): Set<RestaurantItem> {
         val items = if (YearWeek.from(date) == YearWeek.now()) {

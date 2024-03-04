@@ -65,11 +65,11 @@ class RestaurantItemRepositoryTest : ShouldSpec({
 
     }
 
-    should("Try to fetch from Postgres if USP returns empty") {
+    should("Try to fetch from USP if Postgres returns empty") {
         val today = now()
 
-        every { uspRepository.fetch(1) } returns emptySet()
-        every { postgresRepository.get(1, today) } returns setOf(dummyRestaurantItem(today))
+        every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today))
+        every { postgresRepository.get(1, today) } returns emptySet()
 
         target.get(1, setOf(today)) shouldBe setOf(dummyRestaurantItem(today))
 
