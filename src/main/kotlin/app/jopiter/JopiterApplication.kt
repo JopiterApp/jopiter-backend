@@ -35,7 +35,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @SpringBootApplication
 @EnableScheduling
 @PropertySources(
-  PropertySource("../../../../../restaurants/src/main/resources/application-restaurants.properties")
+  PropertySource("/application-restaurants.properties")
 )
 class JopiterApplication {
   @Bean fun objectMapper() = jacksonObjectMapper()
