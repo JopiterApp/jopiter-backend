@@ -74,40 +74,6 @@ class RestaurantItemRepositoryTest : ShouldSpec({
 
     listener(ConstantNowTestListener(now().with(WEDNESDAY)))
 
-    should("Fetch from USP when date is in current week") {
-        val today = now()
-
-        every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today))
-
-        target.get(1, setOf(today)) shouldBe setOf(dummyRestaurantItem(today))
-
-        verify(exactly = 1) { uspRepository.fetch(1) }
-    }
-
-    should("Try to fetch from Postgres if date is before current week") {
-        val beforeCurrentWeek = now().with(MONDAY).minusDays(1)
-
-        every { postgresRepository.get(1, beforeCurrentWeek) } returns setOf(dummyRestaurantItem(beforeCurrentWeek))
-
-        target.get(1, setOf(beforeCurrentWeek)) shouldBe setOf(dummyRestaurantItem(beforeCurrentWeek))
-
-        verify { uspRepository wasNot called }
-        verify(exactly = 1) { postgresRepository.get(1, beforeCurrentWeek) }
-
-    }
-
-    should("Try to fetch from USP if Postgres returns empty") {
-        val today = now()
-
-        every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today))
-        every { postgresRepository.get(1, today) } returns emptySet()
-
-        target.get(1, setOf(today)) shouldBe setOf(dummyRestaurantItem(today))
-
-        verify(exactly = 1) { uspRepository.fetch(1) }
-        verify(exactly = 1) { postgresRepository.get(1, today) }
-
-    }
 
     should("Save any value fetched from USP to Postgres") {
         val today = now()
@@ -115,7 +81,7 @@ class RestaurantItemRepositoryTest : ShouldSpec({
 
         every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))
 
-        target.get(1, setOf(today))
+        target.fetchFromUsp(1)
 
         verify(exactly = 1) { postgresRepository.put(setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))) }
     }

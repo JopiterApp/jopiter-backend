@@ -22,7 +22,6 @@ import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.repository.postgres.PostgresRestaurantItemRepository
 import app.jopiter.restaurants.repository.usp.USPRestaurantItemRepository
 import org.springframework.stereotype.Repository
-import org.threeten.extra.YearWeek
 import java.time.LocalDate
 
 @Repository
