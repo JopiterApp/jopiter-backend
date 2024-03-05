@@ -19,7 +19,7 @@ class PostgresRestaurantItemRepositoryTest : FunSpec({
 
   val postgresContainer = PostgreSQLContainer<Nothing>("postgres")
   val datasource = install(JdbcTestContainerExtension(postgresContainer))
-  val flyway = Flyway.configure().dataSource(datasource).load()
+  val flyway = Flyway.configure().cleanDisabled(false).dataSource(datasource).load()
 
   val database = Database.connect(datasource)
   val target = PostgresRestaurantItemRepository(database)
