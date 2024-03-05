@@ -63,7 +63,7 @@ val centralParser = MenuParser {
 val quadrilateroParser = MenuParser {
   val items = it.cleanItems()
   if (items.size < 3) return@MenuParser closedMenuParser.parse(it)
-  val veg = items.find("Opção:").single()
+  val veg = items.find("Opção").single().cleanString()
   val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
   val dessert = items.getOrNull(items.lastIndex - 3)?.cleanString()
   Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
@@ -90,9 +90,9 @@ val largoSaoFranciscoParser = MenuParser {
 val centralRibeiraoParser = MenuParser {
   val items = it.cleanItems()
   if (items.size < 3) return@MenuParser closedMenuParser.parse(it)
-  val veg = items.find("veg:").single()
-  val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
-  val des = items.getOrNull(items.lastIndex - 4)?.cleanString()
+  val main = items.firstOrNull()?.cleanString()
+  val veg = items.getOrNull(1)?.cleanString()
+  val des = items.getOrNull(5)?.cleanString()
   Menu(main, veg, des, items.cleanStrings(main, veg, des), it)
 }
 
