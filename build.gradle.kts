@@ -111,7 +111,6 @@ tasks.named<BootJar>("bootJar") {
 }
 
 dependencies {
-    implementation(project(":privacy"))
     implementation(project(":restaurants"))
     implementation(project(":timetable"))
 }
