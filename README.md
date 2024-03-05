@@ -2,7 +2,7 @@
 
 This project contains all the source code for Jopiter's backend. Every file is released under the [GNU Affero General Public License v3.0 or later](LICENSE), unless stated otherwise.
 
-![Docker](https://img.shields.io/docker/v/jopiterapp/jopiter-backend)
+[![Docker](https://img.shields.io/docker/v/jopiterapp/jopiter-backend)](https://hub.docker.com/r/jopiterapp/jopiter-backend)
 
 ## Production
 Current production environment can be found at https://persephone.jopiter.app/api/v1/docs/swagger
