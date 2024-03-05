@@ -9,5 +9,6 @@ import javax.sql.DataSource
 class KtormConfiguration(
   private val datasource: DataSource
 ) {
-  @Bean fun database() = Database.connectWithSpringSupport(datasource)
+  @Bean
+  fun database() = Database.connectWithSpringSupport(datasource)
 }

@@ -9,15 +9,12 @@ import org.ktorm.entity.add
 import org.ktorm.entity.filter
 import org.ktorm.entity.map
 import org.ktorm.entity.sequenceOf
-import org.ktorm.entity.toList
-import org.ktorm.entity.toSet
 import org.ktorm.entity.update
 import org.ktorm.schema.Table
 import org.ktorm.schema.date
 import org.ktorm.schema.enum
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
-import org.ktorm.support.postgresql.insertOrUpdate
 import org.ktorm.support.postgresql.textArray
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Repository
@@ -37,7 +34,7 @@ class PostgresRestaurantItemRepository(
   fun put(restaurantItem: RestaurantItem) {
     val items = get(restaurantItem.restaurantId, restaurantItem.date, restaurantItem.period)
 
-    if(items.isEmpty()) {
+    if (items.isEmpty()) {
       restaurantItems.add(restaurantItem.toEntity())
     } else {
       restaurantItems.update(restaurantItem.toEntity())
@@ -46,7 +43,7 @@ class PostgresRestaurantItemRepository(
 
   fun get(restaurantId: Int, date: LocalDate, period: Period? = null): Set<RestaurantItem> {
     val query = restaurantItems.filter { it.date eq date }.filter { it.restaurantId eq restaurantId }
-    if(period != null) query.filter { it.period eq period }
+    if (period != null) query.filter { it.period eq period }
 
     return query.map { it.toItem() }.toSet()
   }

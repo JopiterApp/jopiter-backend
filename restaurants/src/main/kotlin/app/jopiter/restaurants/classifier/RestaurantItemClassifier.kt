@@ -5,8 +5,8 @@ import app.jopiter.restaurants.model.DessertFoodGroup
 import app.jopiter.restaurants.model.DessertItem
 import app.jopiter.restaurants.model.DessertPreparation
 import app.jopiter.restaurants.model.ProteinFoodGroup
-import app.jopiter.restaurants.model.ProteinPreparation
 import app.jopiter.restaurants.model.ProteinItem
+import app.jopiter.restaurants.model.ProteinPreparation
 import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.model.VegetarianFoodGroup
 import app.jopiter.restaurants.model.VegetarianItem
@@ -45,17 +45,29 @@ class RestaurantItemClassifier(
 
   fun classifyProtein(item: String): ProteinItem {
     val classification = proteinClassifier.classify(item)
-    return ProteinItem(item, ProteinFoodGroup.find(classification.foodGroup), ProteinPreparation.find(classification.preparation))
+    return ProteinItem(
+      item,
+      ProteinFoodGroup.find(classification.foodGroup),
+      ProteinPreparation.find(classification.preparation)
+    )
   }
 
   fun classifyVegetarian(item: String): VegetarianItem {
     val classification = vegetarianClassifier.classify(item)
-    return VegetarianItem(item, VegetarianFoodGroup.find(classification.foodGroup), VegetarianPreparation.find(classification.preparation))
+    return VegetarianItem(
+      item,
+      VegetarianFoodGroup.find(classification.foodGroup),
+      VegetarianPreparation.find(classification.preparation)
+    )
   }
 
   fun classifyDessert(item: String): DessertItem {
     val classification = dessertClassifier.classify(item)
-    return DessertItem(item, DessertFoodGroup.find(classification.foodGroup), DessertPreparation.find(classification.preparation))
+    return DessertItem(
+      item,
+      DessertFoodGroup.find(classification.foodGroup),
+      DessertPreparation.find(classification.preparation)
+    )
   }
 
 }

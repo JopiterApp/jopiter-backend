@@ -33,32 +33,32 @@ import java.time.LocalTime.of
 import kotlin.reflect.KClass
 
 class UspVariablesCondition : EnabledCondition {
-    override fun enabled(specKlass: KClass<out Spec>) = "USP_USER_1" in getenv() && "USP_USER_2" in getenv()
+  override fun enabled(specKlass: KClass<out Spec>) = "USP_USER_1" in getenv() && "USP_USER_2" in getenv()
 }
 
 @EnabledIf(UspVariablesCondition::class)
 class TimetableRepositoryTest : ShouldSpec({
 
-    val target = TimetableRepository(SubjectNameRepository())
+  val target = TimetableRepository(SubjectNameRepository())
 
-    should("Return the right subjects (Test 1)") {
-        val answer = target.get(getenv("USP_USER_1"), getenv("USP_PASSWORD_1"))
+  should("Return the right subjects (Test 1)") {
+    val answer = target.get(getenv("USP_USER_1"), getenv("USP_PASSWORD_1"))
 
-        answer shouldBe setOf(
-            Subject(MONDAY, "ACH2017", "Projeto Supervisionado ou de Graduação I", of(12, 0)..of(13, 0)),
-            Subject(WEDNESDAY, "ACH2076", "Segurança da Informação", of(8, 0)..of(12, 0)),
-            Subject(THURSDAY, "ACH2167", "Computação Sônica", of(19, 0)..of(22, 45))
-        )
-    }
+    answer shouldBe setOf(
+      Subject(MONDAY, "ACH2017", "Projeto Supervisionado ou de Graduação I", of(12, 0)..of(13, 0)),
+      Subject(WEDNESDAY, "ACH2076", "Segurança da Informação", of(8, 0)..of(12, 0)),
+      Subject(THURSDAY, "ACH2167", "Computação Sônica", of(19, 0)..of(22, 45))
+    )
+  }
 
-    should("Return the right subjects (Test 2)") {
-        val answer = target.get(getenv("USP_USER_2"), getenv("USP_PASSWORD_2"))
+  should("Return the right subjects (Test 2)") {
+    val answer = target.get(getenv("USP_USER_2"), getenv("USP_PASSWORD_2"))
 
-        answer shouldBe setOf(
-            Subject(MONDAY, "PMT3100", "Fundamentos de Ciência e Engenharia dos Materiais", of(15, 0)..of(16, 40)),
-            Subject(WEDNESDAY, "MAT2454", "Cálculo Diferencial e Integral II", of(11, 10)..of(12, 50)),
-            Subject(FRIDAY, "MAT2454", "Cálculo Diferencial e Integral II", of(11, 10)..of(12, 50)),
-            Subject(SATURDAY, "PCS3617", "Estágio Cooperativo I", of(14, 0)..of(15, 40))
-        )
-    }
+    answer shouldBe setOf(
+      Subject(MONDAY, "PMT3100", "Fundamentos de Ciência e Engenharia dos Materiais", of(15, 0)..of(16, 40)),
+      Subject(WEDNESDAY, "MAT2454", "Cálculo Diferencial e Integral II", of(11, 10)..of(12, 50)),
+      Subject(FRIDAY, "MAT2454", "Cálculo Diferencial e Integral II", of(11, 10)..of(12, 50)),
+      Subject(SATURDAY, "PCS3617", "Estágio Cooperativo I", of(14, 0)..of(15, 40))
+    )
+  }
 })

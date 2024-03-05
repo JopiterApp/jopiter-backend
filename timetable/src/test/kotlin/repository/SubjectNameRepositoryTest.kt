@@ -19,24 +19,23 @@
 package app.jopiter.timetable.repository
 
 import io.kotest.assertions.throwables.shouldThrowAny
-import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 
 class SubjectNameRepositoryTest : ShouldSpec({
 
-    val target = SubjectNameRepository()
+  val target = SubjectNameRepository()
 
-    should("Fetch the subjects name correctly") {
-        target["ACH2017"] shouldBe "Projeto Supervisionado ou de Graduação I"
-        target["ACH2076"] shouldBe "Segurança da Informação"
-        target["PMT3100"] shouldBe "Fundamentos de Ciência e Engenharia dos Materiais"
-        target["MAT2454"] shouldBe "Cálculo Diferencial e Integral II"
-        target["PCS3617"] shouldBe "Estágio Cooperativo I"
-    }
+  should("Fetch the subjects name correctly") {
+    target["ACH2017"] shouldBe "Projeto Supervisionado ou de Graduação I"
+    target["ACH2076"] shouldBe "Segurança da Informação"
+    target["PMT3100"] shouldBe "Fundamentos de Ciência e Engenharia dos Materiais"
+    target["MAT2454"] shouldBe "Cálculo Diferencial e Integral II"
+    target["PCS3617"] shouldBe "Estágio Cooperativo I"
+  }
 
-    should("Throw exception when fetching an unknown subject") {
-        shouldThrowAny { target["ablueblua"] }
-    }
+  should("Throw exception when fetching an unknown subject") {
+    shouldThrowAny { target["ablueblua"] }
+  }
 
 })

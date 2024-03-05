@@ -23,14 +23,14 @@ import com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING
 import java.time.LocalDate
 
 data class RestaurantItem(
-    val restaurantId: Int,
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = STRING) val date: LocalDate,
-    val period: Period,
-    val calories: Int?,
-    val mainItem: String?,
-    val vegetarianItem: String?,
-    val dessertItem: String?,
-    val mundaneItems: List<String>,
-    val unparsedMenu: String,
-    val restaurantName: String = Restaurant.getById(restaurantId).name
+  val restaurantId: Int,
+  @JsonFormat(pattern = "yyyy-MM-dd", shape = STRING) val date: LocalDate,
+  val period: Period,
+  val calories: Int?,
+  val mainItem: String?,
+  val vegetarianItem: String?,
+  val dessertItem: String?,
+  val mundaneItems: List<String>,
+  val unparsedMenu: String,
+  val restaurantName: String = Restaurant.getById(restaurantId).name
 )

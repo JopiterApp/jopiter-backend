@@ -21,7 +21,6 @@ package app.jopiter.restaurants
 import app.jopiter.restaurants.classifier.RestaurantItemClassifier
 import app.jopiter.restaurants.model.Campus
 import app.jopiter.restaurants.model.ClassifiedRestaurantItem
-import app.jopiter.restaurants.model.RestaurantItem
 import app.jopiter.restaurants.repository.RestaurantItemRepository
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -40,48 +39,56 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("\${api.base.path}/restaurants")
 class RestaurantController(
-    private val restaurantItemRepository: RestaurantItemRepository,
-    private val restaurantItemClassifier: RestaurantItemClassifier
+  private val restaurantItemRepository: RestaurantItemRepository,
+  private val restaurantItemClassifier: RestaurantItemClassifier
 ) {
 
-    @Operation(
-        summary = "List all restaurants and their campi",
-        description = "List all restaurants that are available, including to which campus it belongs",
-        tags = ["restaurant"],
-        responses = [
-            ApiResponse(responseCode = "200", content = [
-                Content(array = ArraySchema(schema = Schema(implementation = Campus::class)),
-                    mediaType = "application/json")
-            ])
+  @Operation(
+    summary = "List all restaurants and their campi",
+    description = "List all restaurants that are available, including to which campus it belongs",
+    tags = ["restaurant"],
+    responses = [
+      ApiResponse(
+        responseCode = "200", content = [
+          Content(
+            array = ArraySchema(schema = Schema(implementation = Campus::class)),
+            mediaType = "application/json"
+          )
         ]
-    )
-    @GetMapping
-    fun list() = Campus.values().toList()
+      )
+    ]
+  )
+  @GetMapping
+  fun list() = Campus.values().toList()
 
-    @Operation(
-        summary = "List Items",
-        description = "Retrieves all items for the chosen dates and restaurant",
-        tags = ["restaurant"],
+  @Operation(
+    summary = "List Items",
+    description = "Retrieves all items for the chosen dates and restaurant",
+    tags = ["restaurant"],
 
-        parameters = [
-            Parameter(
-                name = "restaurantId", description = "The restaurant ID as defined by /restaurants", required = true
-            ),
-            Parameter(
-                name = "date", description = "The dates you want to fetch items for. ISO_LOCAL_DATE format (yyyy-MM-dd)"
-            )
-        ],
+    parameters = [
+      Parameter(
+        name = "restaurantId", description = "The restaurant ID as defined by /restaurants", required = true
+      ),
+      Parameter(
+        name = "date", description = "The dates you want to fetch items for. ISO_LOCAL_DATE format (yyyy-MM-dd)"
+      )
+    ],
 
-        responses = [
-            ApiResponse(responseCode = "200", content = [
-                Content(array = ArraySchema(schema = Schema(implementation = ClassifiedRestaurantItem::class)),
-                    mediaType = "application/json")
-            ])
+    responses = [
+      ApiResponse(
+        responseCode = "200", content = [
+          Content(
+            array = ArraySchema(schema = Schema(implementation = ClassifiedRestaurantItem::class)),
+            mediaType = "application/json"
+          )
         ]
-    )
-    @GetMapping("/items")
-    fun items(
-        @RequestParam("restaurantId") restaurantId: Int,
-        @RequestParam("date") @DateTimeFormat(iso = DATE) dates: Set<LocalDate>,
-    ) = restaurantItemRepository.get(restaurantId, dates).map(restaurantItemClassifier::classify)
+      )
+    ]
+  )
+  @GetMapping("/items")
+  fun items(
+    @RequestParam("restaurantId") restaurantId: Int,
+    @RequestParam("date") @DateTimeFormat(iso = DATE) dates: Set<LocalDate>,
+  ) = restaurantItemRepository.get(restaurantId, dates).map(restaurantItemClassifier::classify)
 }

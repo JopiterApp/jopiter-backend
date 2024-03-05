@@ -21,9 +21,6 @@ package app.jopiter.restaurants.repository.usp
 import app.jopiter.restaurants.model.Period.Dinner
 import app.jopiter.restaurants.model.Period.Lunch
 import app.jopiter.restaurants.model.RestaurantItem
-import app.jopiter.restaurants.repository.usp.Menu
-import app.jopiter.restaurants.repository.usp.MenuParser
-import app.jopiter.restaurants.repository.usp.USPRestaurantItemRepository
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
@@ -32,7 +29,6 @@ import org.mockserver.integration.ClientAndServer.startClientAndServer
 import org.mockserver.mock.OpenAPIExpectation.openAPIExpectation
 import org.mockserver.model.Delay.seconds
 import org.mockserver.model.HttpRequest.request
-import java.lang.RuntimeException
 import java.time.LocalDate.of
 
 private val uspRestaurantSpecUrl = "https://raw.githubusercontent.com/JopiterApp/USP-Restaurant-API/main/openapi.yaml"
@@ -40,43 +36,44 @@ private val specification = openAPIExpectation(uspRestaurantSpecUrl)
 
 class USPRestaurantItemRepositoryTest : ShouldSpec({
 
-    val mockServer = startClientAndServer().apply { upsert(specification) }
+  val mockServer = startClientAndServer().apply { upsert(specification) }
 
-    val target = USPRestaurantItemRepository("http://localhost:${mockServer.localPort}", dummyParsers, "hash")
+  val target = USPRestaurantItemRepository("http://localhost:${mockServer.localPort}", dummyParsers, "hash")
 
-    should("Parse a menu using the right parser") {
-        val parsed = target.fetch(6)
+  should("Parse a menu using the right parser") {
+    val parsed = target.fetch(6)
 
-        parsed shouldBe setOf(
-            RestaurantItem(6, of(2020, 3, 9), Lunch, 1219, "foo", "bar", "baz", emptyList(), "", "Central"),
-            RestaurantItem(6, of(2020, 3, 9), Dinner, 1056, "foo", "bar", "baz", emptyList(), "", "Central"),
-            RestaurantItem(6, of(2020, 3, 13), Lunch, 1145, "foo", "bar", "baz", emptyList(), "", "Central"),
-            RestaurantItem(6, of(2020, 3, 13), Dinner, 895, "foo", "bar", "baz", emptyList(), "", "Central"),
-            RestaurantItem(6, of(2020, 3, 14), Lunch, 1236, "foo", "bar", "baz", emptyList(), "", "Central"),
-            RestaurantItem(6, of(2020, 3, 14), Dinner, 0, "foo", "bar", "baz", emptyList(), "", "Central"),
-            RestaurantItem(6, of(2020, 3, 15), Lunch, 0, "foo", "bar", "baz", emptyList(), "", "Central"),
-            RestaurantItem(6, of(2020, 3, 15), Dinner, 0, "foo", "bar", "baz", emptyList(), "", "Central"),
-        )
-    }
+    parsed shouldBe setOf(
+      RestaurantItem(6, of(2020, 3, 9), Lunch, 1219, "foo", "bar", "baz", emptyList(), "", "Central"),
+      RestaurantItem(6, of(2020, 3, 9), Dinner, 1056, "foo", "bar", "baz", emptyList(), "", "Central"),
+      RestaurantItem(6, of(2020, 3, 13), Lunch, 1145, "foo", "bar", "baz", emptyList(), "", "Central"),
+      RestaurantItem(6, of(2020, 3, 13), Dinner, 895, "foo", "bar", "baz", emptyList(), "", "Central"),
+      RestaurantItem(6, of(2020, 3, 14), Lunch, 1236, "foo", "bar", "baz", emptyList(), "", "Central"),
+      RestaurantItem(6, of(2020, 3, 14), Dinner, 0, "foo", "bar", "baz", emptyList(), "", "Central"),
+      RestaurantItem(6, of(2020, 3, 15), Lunch, 0, "foo", "bar", "baz", emptyList(), "", "Central"),
+      RestaurantItem(6, of(2020, 3, 15), Dinner, 0, "foo", "bar", "baz", emptyList(), "", "Central"),
+    )
+  }
 
-    should("Return nothing if the parser has an error") {
-        target.fetch(7).shouldBeEmpty()
-    }
+  should("Return nothing if the parser has an error") {
+    target.fetch(7).shouldBeEmpty()
+  }
 
-    should("Timeout after 2s") {
-        val delayedExpectations = mockServer.retrieveActiveExpectations(request()).map { it.apply{ httpResponse.withDelay(seconds(30)) } }
-        mockServer.upsert(*delayedExpectations.toTypedArray())
+  should("Timeout after 2s") {
+    val delayedExpectations =
+      mockServer.retrieveActiveExpectations(request()).map { it.apply { httpResponse.withDelay(seconds(30)) } }
+    mockServer.upsert(*delayedExpectations.toTypedArray())
 
-        target.fetch(6).shouldBeEmpty()
-    }
+    target.fetch(6).shouldBeEmpty()
+  }
 
-    afterSpec { mockServer.stop(); unmockkAll() }
+  afterSpec { mockServer.stop(); unmockkAll() }
 
 })
 
 private val dummyParsers = mapOf(
-    6 to MenuParser { Menu("foo", "bar", "baz", emptyList(), "") },
-    7 to MenuParser { throw InvalidMenuException(7) },
+  6 to MenuParser { Menu("foo", "bar", "baz", emptyList(), "") },
+  7 to MenuParser { throw InvalidMenuException(7) },
 )
 
 class InvalidMenuException(val menuId: Int) : RuntimeException()

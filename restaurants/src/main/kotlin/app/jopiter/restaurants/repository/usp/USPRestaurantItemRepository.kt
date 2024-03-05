@@ -33,40 +33,40 @@ private const val RequestTimeoutMillis = 2_000
 
 @Repository
 class USPRestaurantItemRepository(
-    @Value("\${usp.base.url}") val uspBaseUrl: String,
-    private val parsers: Map<Int, MenuParser>,
-    @Value("\${usp.hash}")private val uspHash: String
+  @Value("\${usp.base.url}") val uspBaseUrl: String,
+  private val parsers: Map<Int, MenuParser>,
+  @Value("\${usp.hash}") private val uspHash: String
 ) {
 
-    fun fetch(restaurantId: Int): Set<RestaurantItem> {
-        val (_, _, result) = "$uspBaseUrl/menu/$restaurantId"
-            .httpPost(listOf("hash" to uspHash))
-            .timeoutRead(RequestTimeoutMillis)
-            .responseObject<MenuResponse>()
+  fun fetch(restaurantId: Int): Set<RestaurantItem> {
+    val (_, _, result) = "$uspBaseUrl/menu/$restaurantId"
+      .httpPost(listOf("hash" to uspHash))
+      .timeoutRead(RequestTimeoutMillis)
+      .responseObject<MenuResponse>()
 
-        return result.fold(
-            { it.toRestaurantItems(restaurantId, parsers[restaurantId] ?: return@fold emptySet()) },
-            { if (it.causedByInterruption) emptySet() else throw it }
+    return result.fold(
+      { it.toRestaurantItems(restaurantId, parsers[restaurantId] ?: return@fold emptySet()) },
+      { if (it.causedByInterruption) emptySet() else throw it }
+    )
+  }
+
+  private class MenuResponse(val meals: List<MenuMeals>) {
+
+    fun toRestaurantItems(restaurantId: Int, parser: MenuParser) = meals.flatMap {
+      try {
+        listOf(
+          RestaurantItem(restaurantId, it.localDate, Lunch, it.lunch.calories, parser.parse(it.lunch.menu)),
+          RestaurantItem(restaurantId, it.localDate, Dinner, it.dinner.calories, parser.parse(it.dinner.menu))
         )
-    }
+      } catch (_: Exception) {
+        emptySet()
+      }
+    }.toSet()
+  }
 
-    private class MenuResponse(val meals: List<MenuMeals>) {
+  private data class MenuMeals(val dinner: MenuPeriod, val lunch: MenuPeriod, val date: String) {
+    val localDate: LocalDate by lazy { parse(date, ofPattern("dd/MM/yyyy")) }
+  }
 
-        fun toRestaurantItems(restaurantId: Int, parser: MenuParser) = meals.flatMap {
-            try {
-                listOf(
-                    RestaurantItem(restaurantId, it.localDate, Lunch, it.lunch.calories, parser.parse(it.lunch.menu)),
-                    RestaurantItem(restaurantId, it.localDate, Dinner, it.dinner.calories, parser.parse(it.dinner.menu))
-                )
-            } catch (_: Exception) {
-                emptySet()
-            }
-        }.toSet()
-    }
-
-    private data class MenuMeals(val dinner: MenuPeriod, val lunch: MenuPeriod, val date: String) {
-        val localDate: LocalDate by lazy { parse(date, ofPattern("dd/MM/yyyy")) }
-    }
-
-    private data class MenuPeriod(val menu: String, val calories: Int? = null)
+  private data class MenuPeriod(val menu: String, val calories: Int? = null)
 }

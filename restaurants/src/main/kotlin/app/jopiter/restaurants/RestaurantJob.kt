@@ -23,21 +23,18 @@ import app.jopiter.restaurants.repository.RestaurantItemRepository
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
-import java.time.LocalDate.now
-import java.util.concurrent.ScheduledExecutorService
-import java.util.concurrent.TimeUnit.MINUTES
 
 @Component
 class RestaurantJob(
-    private val repository: RestaurantItemRepository
+  private val repository: RestaurantItemRepository
 ) {
 
-    private val logger = LoggerFactory.getLogger(this::class.java)
+  private val logger = LoggerFactory.getLogger(this::class.java)
 
-    @Scheduled(fixedRate = 15_000)
-    fun run() = Restaurant.entries.forEach {
-        logger.info("Starting scheduled execution to fetch $it")
-        repository.fetchFromUsp(it.id)
-        logger.info("Finished scheduled execution to fetch $it")
-    }
+  @Scheduled(fixedRate = 15_000)
+  fun run() = Restaurant.entries.forEach {
+    logger.info("Starting scheduled execution to fetch $it")
+    repository.fetchFromUsp(it.id)
+    logger.info("Finished scheduled execution to fetch $it")
+  }
 }

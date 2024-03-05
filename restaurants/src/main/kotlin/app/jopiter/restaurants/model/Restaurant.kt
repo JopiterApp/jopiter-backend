@@ -44,23 +44,24 @@ import io.swagger.v3.oas.annotations.media.Schema
  */
 @Schema(name = "Campus")
 private interface CampusSer {
-    @get:Schema(example = "Cidade Universitária") val campusName: String
-    val restaurants: List<RestaurantSer>
+  @get:Schema(example = "Cidade Universitária")
+  val campusName: String
+  val restaurants: List<RestaurantSer>
 }
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 @Schema(implementation = CampusSer::class)
 enum class Campus(val campusName: String, val restaurants: List<Restaurant>) {
-    CidadeUniversitaria("Cidade Universitária", listOf(Central, PuSPC, Fisica, Quimicas)),
-    QuadrilateroSaude("Quadrilátero Saúde", listOf(EscolaDeEnfermagem, SaudePublica)),
-    LargoSaoFrancisco("Largo São Francisco", listOf(FacDireito)),
-    UspLeste("USP Leste", listOf(Each)),
-    Bauru("Campus de Bauru", listOf(Restaurant.Bauru)),
-    LuizDeQueiroz("Campus \"Luiz de Queiroz\"", listOf(Piracicaba)),
-    FernandoCosta("Campus \"Fernando Costa\"", listOf(Pirassununga)),
-    SaoCarlos("Campus de São Carlos", listOf(Crhea, RestauranteArea1, RestauranteArea2)),
-    RibeiraoPreto("Campus de Ribeirão Preto", listOf(CentralRibeirao)),
-    Lorena("Campus de Lorena", listOf(Eel1, Eel2))
+  CidadeUniversitaria("Cidade Universitária", listOf(Central, PuSPC, Fisica, Quimicas)),
+  QuadrilateroSaude("Quadrilátero Saúde", listOf(EscolaDeEnfermagem, SaudePublica)),
+  LargoSaoFrancisco("Largo São Francisco", listOf(FacDireito)),
+  UspLeste("USP Leste", listOf(Each)),
+  Bauru("Campus de Bauru", listOf(Restaurant.Bauru)),
+  LuizDeQueiroz("Campus \"Luiz de Queiroz\"", listOf(Piracicaba)),
+  FernandoCosta("Campus \"Fernando Costa\"", listOf(Pirassununga)),
+  SaoCarlos("Campus de São Carlos", listOf(Crhea, RestauranteArea1, RestauranteArea2)),
+  RibeiraoPreto("Campus de Ribeirão Preto", listOf(CentralRibeirao)),
+  Lorena("Campus de Lorena", listOf(Eel1, Eel2))
 }
 
 /**
@@ -70,51 +71,53 @@ enum class Campus(val campusName: String, val restaurants: List<Restaurant>) {
  */
 @Schema(name = "Restaurant")
 private interface RestaurantSer {
-    @get:Schema(example = "9") val id: Int
-    @get:Schema(example = "Químicas") val restaurantName: String
+  @get:Schema(example = "9")
+  val id: Int
+  @get:Schema(example = "Químicas")
+  val restaurantName: String
 }
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 enum class Restaurant(val id: Int, val restaurantName: String) {
 
-    // Cidade Universitária
-    Central(6, "Central - Campus Butantã"),
-    PuSPC(7, "PUSP-C - Campus Butantã"),
-    Fisica(8, "Física - Campus Butantã"),
-    Quimicas(9, "Químicas - Campus Butantã"),
+  // Cidade Universitária
+  Central(6, "Central - Campus Butantã"),
+  PuSPC(7, "PUSP-C - Campus Butantã"),
+  Fisica(8, "Física - Campus Butantã"),
+  Quimicas(9, "Químicas - Campus Butantã"),
 
-    // Quatrilátero Saúde
-    EscolaDeEnfermagem(12, "Escola de Enfermagem"),
-    SaudePublica(11, "Fac. Saúde Pública"),
+  // Quatrilátero Saúde
+  EscolaDeEnfermagem(12, "Escola de Enfermagem"),
+  SaudePublica(11, "Fac. Saúde Pública"),
 
-    // Largo São Francisco
-    FacDireito(14, "Fac. Direito"),
+  // Largo São Francisco
+  FacDireito(14, "Fac. Direito"),
 
-    // USP Leste
-    Each(13, "EACH"),
+  // USP Leste
+  Each(13, "EACH"),
 
-    // Baurú
-    Bauru(20, "Bauru"),
+  // Baurú
+  Bauru(20, "Bauru"),
 
-    // Luiz de Queiroz
-    Piracicaba(1, "Piracicaba"),
+  // Luiz de Queiroz
+  Piracicaba(1, "Piracicaba"),
 
-    // Fernando Costa
-    Pirassununga(5, "Pirassununga"),
+  // Fernando Costa
+  Pirassununga(5, "Pirassununga"),
 
-    // São Carlos
-    Crhea(4, "Restaurante CRHEA"),
-    RestauranteArea1(2, "Restaurante área 1"),
-    RestauranteArea2(3, "Restaurante área 2"),
+  // São Carlos
+  Crhea(4, "Restaurante CRHEA"),
+  RestauranteArea1(2, "Restaurante área 1"),
+  RestauranteArea2(3, "Restaurante área 2"),
 
-    // Ribeirão
-    CentralRibeirao(19, "Restaurante Central -Campus RP"),
+  // Ribeirão
+  CentralRibeirao(19, "Restaurante Central -Campus RP"),
 
-    // Lorena
-    Eel1(17, "EEL - Área I"),
-    Eel2(23, "EEL - Área II"),;
+  // Lorena
+  Eel1(17, "EEL - Área I"),
+  Eel2(23, "EEL - Área II"), ;
 
-    companion object {
-        fun getById(id: Int) = entries.first { it.id == id }
-    }
+  companion object {
+    fun getById(id: Int) = entries.first { it.id == id }
+  }
 }

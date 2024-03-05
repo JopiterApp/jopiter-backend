@@ -10,7 +10,12 @@ class ProteinClassifierTest : FunSpec({
   test("Smoke test") {
     val result = target.classify("Almôndega acebolada ao shoyo")
 
-    result shouldBe ProteinClassification("bovina", "ao molho leve", "alcatra, almôndega, bife de contra filé, bife de patinho, coxão duro, lagarto, patinho/coxão mole", "Marrom/Bege")
+    result shouldBe ProteinClassification(
+      "bovina",
+      "ao molho leve",
+      "alcatra, almôndega, bife de contra filé, bife de patinho, coxão duro, lagarto, patinho/coxão mole",
+      "Marrom/Bege"
+    )
 
     result.foodGroup shouldBe "bovina"
     result.preparation shouldBe "ao molho leve"

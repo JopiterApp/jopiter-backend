@@ -24,8 +24,8 @@ import org.springframework.stereotype.Repository
 @Repository
 class SubjectNameRepository {
 
-    private val url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis="
+  private val url = "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis="
 
-    operator fun get(code: String) =
-        connect(url + code).get().selectFirst("b:contains($code)").text().substringAfter("-").trim()
+  operator fun get(code: String) =
+    connect(url + code).get().selectFirst("b:contains($code)").text().substringAfter("-").trim()
 }

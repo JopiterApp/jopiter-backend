@@ -29,66 +29,69 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.extensions.testcontainers.JdbcTestContainerExtension
 import io.kotest.extensions.time.ConstantNowTestListener
 import io.kotest.matchers.shouldBe
-import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.flywaydb.core.Flyway
 import org.ktorm.database.Database
 import org.testcontainers.containers.PostgreSQLContainer
-import java.time.DayOfWeek.*
+import java.time.DayOfWeek.WEDNESDAY
 import java.time.LocalDate
 import java.time.LocalDate.now
 
 class RestaurantItemRepositoryIntegrationTest : ShouldSpec({
-    val postgres = install(JdbcTestContainerExtension(PostgreSQLContainer("postgres:16")))
-    val flyway = Flyway.configure().cleanDisabled(false).dataSource(postgres).load()
+  val postgres = install(JdbcTestContainerExtension(PostgreSQLContainer("postgres:16")))
+  val flyway = Flyway.configure().cleanDisabled(false).dataSource(postgres).load()
 
-    beforeSpec {
-        flyway.clean()
-        flyway.migrate()
-    }
+  beforeSpec {
+    flyway.clean()
+    flyway.migrate()
+  }
 
-    val postgresRepository = PostgresRestaurantItemRepository(Database.connect(postgres))
+  val postgresRepository = PostgresRestaurantItemRepository(Database.connect(postgres))
 
-    val uspRepository = USPRestaurantItemRepository("https://uspdigital.usp.br/rucard/servicos", parsers, "596df9effde6f877717b4e81fdb2ca9f")
+  val uspRepository = USPRestaurantItemRepository(
+    "https://uspdigital.usp.br/rucard/servicos",
+    parsers,
+    "596df9effde6f877717b4e81fdb2ca9f"
+  )
 
 
-    val target = RestaurantItemRepository(uspRepository, postgresRepository)
+  val target = RestaurantItemRepository(uspRepository, postgresRepository)
 
-    should("Persist all items to the database") {
-        val firstItemResult = target.get(13, setOf(LocalDate.of(2024, 3, 4)))
-        val secondItemResult = target.get(13, setOf(LocalDate.of(2024, 3, 4)))
+  should("Persist all items to the database") {
+    val firstItemResult = target.get(13, setOf(LocalDate.of(2024, 3, 4)))
+    val secondItemResult = target.get(13, setOf(LocalDate.of(2024, 3, 4)))
 
-        firstItemResult shouldBe secondItemResult
-    }
+    firstItemResult shouldBe secondItemResult
+  }
 
 })
 
 class RestaurantItemRepositoryTest : ShouldSpec({
 
-    val uspRepository = mockk<USPRestaurantItemRepository>()
-    val postgresRepository = mockk<PostgresRestaurantItemRepository>(relaxed = true)
+  val uspRepository = mockk<USPRestaurantItemRepository>()
+  val postgresRepository = mockk<PostgresRestaurantItemRepository>(relaxed = true)
 
-    val target = RestaurantItemRepository(uspRepository, postgresRepository)
+  val target = RestaurantItemRepository(uspRepository, postgresRepository)
 
-    listener(ConstantNowTestListener(now().with(WEDNESDAY)))
+  listener(ConstantNowTestListener(now().with(WEDNESDAY)))
 
 
-    should("Save any value fetched from USP to Postgres") {
-        val today = now()
-        val tomorrow = today.plusDays(1)
+  should("Save any value fetched from USP to Postgres") {
+    val today = now()
+    val tomorrow = today.plusDays(1)
 
-        every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))
+    every { uspRepository.fetch(1) } returns setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))
 
-        target.fetchFromUsp(1)
+    target.fetchFromUsp(1)
 
-        verify(exactly = 1) { postgresRepository.put(setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))) }
-    }
+    verify(exactly = 1) { postgresRepository.put(setOf(dummyRestaurantItem(today), dummyRestaurantItem(tomorrow))) }
+  }
 
-    isolationMode = InstancePerTest
+  isolationMode = InstancePerTest
 
 })
 
 private fun dummyRestaurantItem(date: LocalDate) =
-    RestaurantItem(1, date, Lunch, 0, "main", "veg", "des", emptyList(), "")
+  RestaurantItem(1, date, Lunch, 0, "main", "veg", "des", emptyList(), "")

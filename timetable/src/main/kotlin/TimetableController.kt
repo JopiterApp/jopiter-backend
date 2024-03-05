@@ -32,34 +32,34 @@ import org.springframework.web.bind.annotation.RequestBody as SpringRequestBody
 
 @RestController("\${api.base.path}/timetable")
 class TimetableController(
-    private val timetableRepository: TimetableRepository,
+  private val timetableRepository: TimetableRepository,
 ) {
 
-    @Operation(
-        summary = "Fetch a timetable from JupitereWeb",
-        description = "Tries to login to user's account and obtain all information related to their timetable",
-        tags = ["timetable"],
+  @Operation(
+    summary = "Fetch a timetable from JupitereWeb",
+    description = "Tries to login to user's account and obtain all information related to their timetable",
+    tags = ["timetable"],
 
-        requestBody = RequestBody(content = [Content(schema = Schema(implementation = TimetableRequest::class))]),
+    requestBody = RequestBody(content = [Content(schema = Schema(implementation = TimetableRequest::class))]),
 
-        responses = [
-            ApiResponse(
-                responseCode = "200",
-                content = [Content(array = ArraySchema(schema = Schema(implementation = Subject::class)))]
-            ),
-            ApiResponse(responseCode = "401"),
-            ApiResponse(responseCode = "503")
-        ]
-    )
-    @PostMapping()
-    fun timetable(@SpringRequestBody request: TimetableRequest): ResponseEntity<Set<Subject>> {
-        val (user, password) = request
-        return try {
-            ResponseEntity.ok(timetableRepository.get(user, password))
-        } catch (_: Throwable) {
-            ResponseEntity.badRequest().build()
-        }
+    responses = [
+      ApiResponse(
+        responseCode = "200",
+        content = [Content(array = ArraySchema(schema = Schema(implementation = Subject::class)))]
+      ),
+      ApiResponse(responseCode = "401"),
+      ApiResponse(responseCode = "503")
+    ]
+  )
+  @PostMapping()
+  fun timetable(@SpringRequestBody request: TimetableRequest): ResponseEntity<Set<Subject>> {
+    val (user, password) = request
+    return try {
+      ResponseEntity.ok(timetableRepository.get(user, password))
+    } catch (_: Throwable) {
+      ResponseEntity.badRequest().build()
     }
+  }
 
-    data class TimetableRequest(val user: String, val password: String)
+  data class TimetableRequest(val user: String, val password: String)
 }

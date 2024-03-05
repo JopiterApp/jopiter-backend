@@ -11,6 +11,6 @@
     </appender>
 
     <root level="warn">
-        <appender-ref ref="Console" />
+        <appender-ref ref="Console"/>
     </root>
 </configuration>

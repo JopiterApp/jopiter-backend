@@ -19,10 +19,10 @@
 apply(plugin = "kotlin")
 
 dependencies {
-    // JSoup
-    implementation("org.jsoup:jsoup:1.13.1")
+  // JSoup
+  implementation("org.jsoup:jsoup:1.13.1")
 
-    // Selenium
-    implementation("org.seleniumhq.selenium:selenium-firefox-driver:3.141.59")
-    implementation("org.seleniumhq.selenium:htmlunit-driver:2.33.2")
+  // Selenium
+  implementation("org.seleniumhq.selenium:selenium-firefox-driver:3.141.59")
+  implementation("org.seleniumhq.selenium:htmlunit-driver:2.33.2")
 }

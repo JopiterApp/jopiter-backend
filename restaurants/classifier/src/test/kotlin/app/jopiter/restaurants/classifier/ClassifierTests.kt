@@ -18,8 +18,6 @@
 
 package app.jopiter.restaurants.classifier
 
-import app.jopiter.restaurants.classifier.ClassifiableRow
-import app.jopiter.restaurants.classifier.Classifier
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.core.spec.style.funSpec
 import io.kotest.matchers.doubles.shouldBeGreaterThanOrEqual

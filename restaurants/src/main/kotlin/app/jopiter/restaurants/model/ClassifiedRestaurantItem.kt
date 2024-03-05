@@ -1,7 +1,6 @@
 package app.jopiter.restaurants.model
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import org.springframework.stereotype.Component
 import java.time.LocalDate
 
 

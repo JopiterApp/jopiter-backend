@@ -30,32 +30,32 @@ import io.kotest.matchers.shouldBe
 @Tags("Daily")
 class RestaurantTest : FunSpec({
 
-    context("Restaurants model reflects what USP returns") {
-        val restaurantGroups = fetchRestaurantGroupsFromUSP()
+  context("Restaurants model reflects what USP returns") {
+    val restaurantGroups = fetchRestaurantGroupsFromUSP()
 
-        test("Should have same number of campi") {
-            Campus.values() shouldBeSameSizeAs restaurantGroups
-        }
-
-        test("Should have a 1 to 1 mapping between USP's response and our model") {
-            val allRestaurants = restaurantGroups.flatMap { it.restaurants }
-            allRestaurants.forAll { (alias, id) ->
-                Restaurant.getById(id).restaurantName shouldBe alias
-            }
-        }
+    test("Should have same number of campi") {
+      Campus.values() shouldBeSameSizeAs restaurantGroups
     }
 
-    test("Should return restaurant by id") {
-        val restaurant = Restaurant.values().random()
-        Restaurant.getById(restaurant.id) shouldBe restaurant
+    test("Should have a 1 to 1 mapping between USP's response and our model") {
+      val allRestaurants = restaurantGroups.flatMap { it.restaurants }
+      allRestaurants.forAll { (alias, id) ->
+        Restaurant.getById(id).restaurantName shouldBe alias
+      }
     }
+  }
+
+  test("Should return restaurant by id") {
+    val restaurant = Restaurant.values().random()
+    Restaurant.getById(restaurant.id) shouldBe restaurant
+  }
 })
 
 private fun fetchRestaurantGroupsFromUSP() =
-    "https://uspdigital.usp.br/rucard/servicos/restaurants".httpPost()
-        .header(Headers.CONTENT_TYPE, "application/x-www-form-urlencoded")
-        .body("hash=596df9effde6f877717b4e81fdb2ca9f")
-        .responseObject<List<RestaurantGroup>>().third.get()
+  "https://uspdigital.usp.br/rucard/servicos/restaurants".httpPost()
+    .header(Headers.CONTENT_TYPE, "application/x-www-form-urlencoded")
+    .body("hash=596df9effde6f877717b4e81fdb2ca9f")
+    .responseObject<List<RestaurantGroup>>().third.get()
 
 data class RestaurantGroup(val name: String, val restaurants: List<IndividualRestaurant>)
 data class IndividualRestaurant(val alias: String, val id: Int)

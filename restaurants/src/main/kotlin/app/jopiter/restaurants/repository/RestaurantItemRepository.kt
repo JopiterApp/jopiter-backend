@@ -26,20 +26,20 @@ import java.time.LocalDate
 
 @Repository
 class RestaurantItemRepository(
-    private val uspRestaurantItemRepository: USPRestaurantItemRepository,
-    private val postgresRestaurantItemRepository: PostgresRestaurantItemRepository
+  private val uspRestaurantItemRepository: USPRestaurantItemRepository,
+  private val postgresRestaurantItemRepository: PostgresRestaurantItemRepository
 ) {
-    fun get(restaurantId: Int, dates: Set<LocalDate>) = dates.flatMap { fetch(restaurantId, it) }.toSet()
+  fun get(restaurantId: Int, dates: Set<LocalDate>) = dates.flatMap { fetch(restaurantId, it) }.toSet()
 
-    private fun fetch(restaurantId: Int, date: LocalDate) =
-        fetchFromPostgres(restaurantId, date)
+  private fun fetch(restaurantId: Int, date: LocalDate) =
+    fetchFromPostgres(restaurantId, date)
 
-    fun fetchFromUsp(restaurantId: Int): Set<RestaurantItem> {
-        val items = uspRestaurantItemRepository.fetch(restaurantId)
-        postgresRestaurantItemRepository.put(items)
-        return items
-    }
+  fun fetchFromUsp(restaurantId: Int): Set<RestaurantItem> {
+    val items = uspRestaurantItemRepository.fetch(restaurantId)
+    postgresRestaurantItemRepository.put(items)
+    return items
+  }
 
-    private fun fetchFromPostgres(restaurantId: Int, date: LocalDate) =
-        postgresRestaurantItemRepository.get(restaurantId, date)
+  private fun fetchFromPostgres(restaurantId: Int, date: LocalDate) =
+    postgresRestaurantItemRepository.get(restaurantId, date)
 }
