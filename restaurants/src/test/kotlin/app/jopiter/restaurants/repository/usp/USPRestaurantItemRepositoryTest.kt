@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package repository.usp
+package app.jopiter.restaurants.repository.usp
 
 import app.jopiter.restaurants.model.Period.Dinner
 import app.jopiter.restaurants.model.Period.Lunch
@@ -76,5 +76,7 @@ class USPRestaurantItemRepositoryTest : ShouldSpec({
 
 private val dummyParsers = mapOf(
     6 to MenuParser { Menu("foo", "bar", "baz", emptyList(), "") },
-    7 to MenuParser { throw RuntimeException() },
+    7 to MenuParser { throw InvalidMenuException(7) },
 )
+
+class InvalidMenuException(val menuId: Int) : RuntimeException()

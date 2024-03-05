@@ -27,7 +27,6 @@ import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.servers.Server
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.PropertySource
 import org.springframework.context.annotation.PropertySources
@@ -36,29 +35,31 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @SpringBootApplication
 @EnableScheduling
 @PropertySources(
-    PropertySource("application-restaurants.properties")
+  PropertySource("../../../../../restaurants/src/main/resources/application-restaurants.properties")
 )
 class JopiterApplication {
-    @Bean fun objectMapper() = jacksonObjectMapper()
-        .registerKotlinModule()
-        .registerModule(JavaTimeModule())
+  @Bean fun objectMapper() = jacksonObjectMapper()
+    .registerKotlinModule()
+    .registerModule(JavaTimeModule())
 
-    @Bean
-    fun openApi() = OpenAPI()
-        .info(Info()
-            .title("Jopiter Backend")
-            .description("API specification for the Jopiter App")
-            .version("1.0.0")
-            .license(License()
-                .name("AGPL-3.0 License")
-                .url("https://github.com/JopiterApp/jopiter-backend/blob/master/LICENSE")
-            )
+  @Bean
+  fun openApi() = OpenAPI()
+    .info(
+      Info()
+        .title("Jopiter Backend")
+        .description("API specification for the Jopiter App")
+        .version("1.0.0")
+        .license(
+          License()
+            .name("AGPL-3.0 License")
+            .url("https://github.com/JopiterApp/jopiter-backend/blob/master/LICENSE")
         )
-      .addServersItem(
-        Server().description("Production").url("https://persephone.jopiter.app")
-      )
+    )
+    .addServersItem(
+      Server().description("Production").url("https://persephone.jopiter.app")
+    )
 }
 
 fun main() {
-    runApplication<JopiterApplication>()
+  runApplication<JopiterApplication>()
 }

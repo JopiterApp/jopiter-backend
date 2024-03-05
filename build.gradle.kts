@@ -59,6 +59,8 @@ allprojects {
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("io.kotest.extensions:kotest-extensions-spring:1.1.1")
 
+        // Detekt
+        detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
 
         // Fuel
         implementation("com.github.kittinunf.fuel:fuel:2.3.1")
@@ -113,4 +115,9 @@ tasks.named<BootJar>("bootJar") {
 dependencies {
     implementation(project(":restaurants"))
     implementation(project(":timetable"))
+}
+
+detekt {
+    autoCorrect = true
+    buildUponDefaultConfig = true
 }

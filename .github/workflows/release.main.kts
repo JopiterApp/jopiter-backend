@@ -14,7 +14,7 @@ import io.github.typesafegithub.workflows.dsl.expressions.expr
 import io.github.typesafegithub.workflows.dsl.workflow
 import io.github.typesafegithub.workflows.yaml.writeToFile
 
-val version = expr { Contexts.github.ref_name }
+val version = expr { github.ref_name }
 val DOCKER_HUB_USERNAME by Contexts.secrets
 val DOCKER_HUB_TOKEN by Contexts.secrets
 val dockerNamespace = "jopiterapp/jopiter-backend"

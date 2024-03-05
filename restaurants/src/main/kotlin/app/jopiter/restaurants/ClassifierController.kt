@@ -23,7 +23,7 @@ class ClassifierController(
   @Operation(
     summary = "Classify an item",
     description = "Attempts to classify a specific item in the categories [Protein, Vegetarian, Dessert], returning all guesses",
-    tags = ["classifier"],
+    tags = ["app/jopiter/restaurants/classifier"],
 
     parameters = [
       Parameter(
