@@ -115,6 +115,6 @@ enum class Restaurant(val id: Int, val restaurantName: String) {
     Eel2(23, "EEL - Área II"),;
 
     companion object {
-        fun getById(id: Int) = values().first { it.id == id }
+        fun getById(id: Int) = entries.first { it.id == id }
     }
 }

@@ -20,6 +20,7 @@ package app.jopiter.restaurants
 
 import app.jopiter.restaurants.model.Restaurant
 import app.jopiter.restaurants.repository.RestaurantItemRepository
+import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import java.time.LocalDate.now
@@ -31,6 +32,12 @@ class RestaurantJob(
     private val repository: RestaurantItemRepository
 ) {
 
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     @Scheduled(fixedRate = 15_000)
-    fun run() = Restaurant.values().forEach { repository.get(it.id, setOf(now())) }
+    fun run() = Restaurant.entries.forEach {
+        logger.info("Starting scheduled execution to fetch $it")
+        repository.fetchFromUsp(it.id)
+        logger.info("Finished scheduled execution to fetch $it")
+    }
 }

@@ -44,18 +44,12 @@ class PostgresRestaurantItemRepository(
     }
   }
 
-  fun get(restaurantId: Int, date: LocalDate): Set<RestaurantItem> = restaurantItems
-    .filter { it.date eq date }
-    .filter { it.restaurantId eq restaurantId }
-    .map { it.toItem() }
-    .toSet()
+  fun get(restaurantId: Int, date: LocalDate, period: Period? = null): Set<RestaurantItem> {
+    val query = restaurantItems.filter { it.date eq date }.filter { it.restaurantId eq restaurantId }
+    if(period != null) query.filter { it.period eq period }
 
-  fun get(restaurantId: Int, date: LocalDate, period: Period): Set<RestaurantItem> = restaurantItems
-    .filter { it.date eq date }
-    .filter { it.restaurantId eq restaurantId }
-    .filter { it.period eq period }
-    .map { it.toItem() }
-    .toSet()
+    return query.map { it.toItem() }.toSet()
+  }
 }
 
 object RestaurantItems : Table<RestaurantItemEntity>("restaurant_item") {
