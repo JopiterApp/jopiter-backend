@@ -1,6 +1,6 @@
-CREATE TYPE period AS ENUM ('Lunch', 'Dinner');
+CREATE TYPE IF NOT EXISTS period AS ENUM ('Lunch', 'Dinner');
 
-CREATE TABLE restaurant_item
+CREATE TABLE IF NOT EXISTS restaurant_item
 (
     restaurant_id   int  not null,
     restaurant_name text not null,
