@@ -22,7 +22,7 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-version = "2.4.4"
+version = "2.4.5"
 group = "app.jopiter"
 
 plugins {
