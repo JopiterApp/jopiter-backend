@@ -1,4 +1,11 @@
-CREATE TYPE IF NOT EXISTS period AS ENUM ('Lunch', 'Dinner');
+DO
+$$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'period') THEN
+CREATE TYPE period AS ENUM ('Lunch', 'Dinner');
+END IF;
+END
+$$
 
 CREATE TABLE IF NOT EXISTS restaurant_item
 (
