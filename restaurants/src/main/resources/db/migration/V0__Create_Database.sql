@@ -6,6 +6,7 @@ CREATE TYPE period AS ENUM ('Lunch', 'Dinner');
 END IF;
 END
 $$
+LANGUAGE plpgsql;
 
 CREATE TABLE IF NOT EXISTS restaurant_item
 (
