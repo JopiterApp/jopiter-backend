@@ -7,6 +7,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.testcontainers.JdbcTestContainerExtension
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldBeSingleton
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.flywaydb.core.Flyway
 import org.ktorm.database.Database
@@ -57,5 +58,28 @@ class PostgresRestaurantItemRepositoryTest : FunSpec({
       it.mundaneItems.shouldBeEmpty()
       it.unparsedMenu shouldBe ""
     }
+  }
+
+  test("Updates a restaurant item in the database") {
+    val item = RestaurantItem(
+      restaurantId = 1,
+      restaurantName = "foo",
+      date = LocalDate.now(),
+      period = Period.Lunch,
+      calories = 10,
+      mainItem = "main",
+      vegetarianItem = "vegetarian",
+      dessertItem = "dessert",
+      mundaneItems = emptyList(),
+      unparsedMenu = ""
+    )
+
+    target.put(item)
+
+    val updatedItem = item.copy(period = Period.Dinner)
+
+    target.put(updatedItem)
+
+    database.sequenceOf(RestaurantItems).toList().shouldHaveSize(2)
   }
 })

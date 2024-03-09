@@ -42,8 +42,8 @@ class PostgresRestaurantItemRepository(
   }
 
   fun get(restaurantId: Int, date: LocalDate, period: Period? = null): Set<RestaurantItem> {
-    val query = restaurantItems.filter { it.date eq date }.filter { it.restaurantId eq restaurantId }
-    if (period != null) query.filter { it.period eq period }
+    var query = restaurantItems.filter { it.date eq date }.filter { it.restaurantId eq restaurantId }
+    if (period != null) query = query.filter { it.period eq period }
 
     return query.map { it.toItem() }.toSet()
   }
