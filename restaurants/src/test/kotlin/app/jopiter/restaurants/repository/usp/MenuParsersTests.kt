@@ -52,232 +52,191 @@ class MenuParsersTests : FunSpec({
 private val examples = listOf(
   Example(
     1,
-    "Acompanhamentos: Arroz / Feijão / Arroz Integral\nPrato principal: Frango assado\nOpção Vegetariana: Ovo pizzaiolo (lactose),\nGuarnição: Polenta\nSaladas: Catalonha, cenoura c/ beterraba\nSobremesa: Melão / Suco: Laranja",
-    "Frango assado",
-    "Ovo pizzaiolo (lactose)",
-    "Melão",
-    ""
+    "Acompanhamentos: Arroz / Feijão/Arroz Integral\nPrato principal: Pernil acebolado\nOpção Vegetariana: Ervilha c/ creme de abobora\nGuarnição: Farofa c/azeitona e couve flor\nSaladas: Alface/ berinjela c/ pimentões\nSobremesa: Melão",
+    "Pernil acebolado",
+    "Ervilha com creme de abobora",
+    "Melão"
   ),
   Example(
     1,
-    "Acompanhamentos: Arroz / Feijão Preto / Arroz Integral\nPrato principal: Bife de panela\nOpção Vegetariana: PTS ao sugo\nGuarnição: Macarrão alho e óleo (glúten),\nSaladas: Repolho roxo, abóbora\nSobremesa:  Gelatina de limão / banana / Suco: Laranja",
-    "Bife de panela",
-    "Pts ao sugo",
-    "Gelatina de limão",
-    ""
+    "Acompanhamentos: Arroz / Feijão /Arroz Integral\nPrato principal: Carne de panela\nOpção Vegetariana: Ovo frito\nGuarnição: Macarrão/ brócolis\nSaladas: Alface /Abobrinha cozida\nSobremesa: Laranja",
+    "Carne de panela",
+    "Ovo frito",
+    "Laranja"
   ),
   Example(
     2,
-    "Arroz/Feijão/ Arroz integral/Saladas: Diversas/Filé de coxa Assado/Opção do Prato Principal: PVT alemão/Polenta cremosa/Sobremesa: Romeu e Julieta/ Abacaxi/Mini Pão e Suco",
-    "Filé de coxa assado",
-    "Pvt alemão",
-    "Romeu e julieta",
-    ""
+    "Arroz/Feijão/ Arroz integral/\nSaladas: Diversas/\nBife ao molho ferrugem/\nOpção do Prato Principal: Lasanha de ricota e espinafre/\nRepolho com azeitonas/\nSobremesa: Doce de batata/Laranja/\nMini Pão e Suco",
+    "Bife ao molho ferrugem",
+    "Lasanha de ricota e espinafre",
+    "Doce de batata"
   ),
   Example(
     2,
-    "Arroz/Feijão/ Arroz integral/Saladas: Diversas/Estrogonofe de carne /Opção do Prato Principal: Estrogonofe de grão de bico/Batata palha/Sobremesa: Banana caramelada/ Mamão/Mini Pão e Suco",
-    "Estrogonofe de carne",
-    "Estrogonofe de grão de bico",
-    "Banana caramelada",
-    ""
+    "Arroz/Feijão/ Arroz integral/\nSaladas: Diversas/\nCarne em cubos ao molho roty/\nOpção do Prato Principal: Omelete à margaritta/\nVagem à provençal/\nSobremesa: Pudim de maria mole com calda de goiabada/Abacaxi/\nMini Pão e Suco",
+    "Carne em cubos ao molho roty",
+    "Omelete à margaritta",
+    "Pudim de maria mole com calda de goiabada"
   ),
   Example(
     3,
-    "Arroz/Feijão/ Arroz integral/Saladas: Diversas/Filé de coxa Assado/Opção do Prato Principal: PVT alemão/Polenta cremosa/Sobremesa: Romeu e Julieta/ Abacaxi/Mini Pão e Suco",
-    "Filé de coxa assado",
-    "Pvt alemão",
-    "Romeu e julieta",
-    ""
+    "Arroz/Feijão/ Arroz integral/\nSaladas: Diversas/\nBife ao molho ferrugem/\nOpção do Prato Principal: Lasanha de ricota e espinafre/\nRepolho com azeitonas/\nSobremesa: Doce de batata/Laranja/\nMini Pão e Suco",
+    "Bife ao molho ferrugem",
+    "Lasanha de ricota e espinafre",
+    "Doce de batata"
   ),
   Example(3, "Fechado", null, null, null),
   Example(
     5,
-    "Arroz branco/Arroz integral/Feijão carioca\nPrato principal: Carne assada ao molho madeira\nOpção vegetariana: Bolinho de lentilha (CONTÉM GLÚTEN),   \nGuarnição: Purê de batata \nSalada: Alface - Cenoura - Abóbora cozida \nSobremesa: Paçoca\nSuco de Morango e Mini pão francês",
-    "Carne assada ao molho madeira",
-    "Bolinho de lentilha (contém glúten),",
-    "Paçoca",
-    ""
+    "Arroz branco/Arroz integral/Feijão carioca\nPrato principal: Carne louca\nOpção vegetariana: Hambúrguer de feijão branco\nGuarnição: Mix de folhas refogada\nSalada: Alface - Beterraba - Couve flor\nSobremesa: Melancia\nSuco: Abacaxi\nMini pão francês",
+    "Carne louca",
+    "Hambúrguer de feijão branco",
+    "Melancia"
   ),
   Example(
     5,
-    "Arroz branco/Arroz integral/Feijão carioca\nPrato principal: Peixe a portuguesa\nOpção vegetariana: Escondidinho de PTS   \nGuarnição: Creme de cenoura\nSalada: Alface - Pepino - Beterraba cozida \nSobremesa: Paçoca\nSuco de Morango e Mini pão francês",
-    "Peixe a portuguesa",
-    "Escondidinho de pts",
-    "Paçoca",
-    ""
+    "Arroz branco/Arroz integral/Feijão carioca\nPrato principal: Filé de sobrecoxa crocante (Contém Glúten)\nOpção vegetariana: Abobrinha recheada com PTS\nGuarnição: Purê de mandioquinha (Contém Lactose)\nSalada: Alface, Repolho verde, Berinjela com cebola\nSobremesa: Pudim de baunilha (Contém Lactose)\nSuco: Maracujá\nMini pão francês",
+    "Filé de sobrecoxa crocante (contém glúten)",
+    "Abobrinha recheada com pts",
+    "Pudim de baunilha (contém lactose)"
   ),
   Example(
     6,
-    "Arroz / feijão / arroz integral\nFrango assado\nOpção: Ervilha com legumes\nRepolho refogado\nSalada de beterraba\nPão de mel\nMinipão / refresco",
-    "Frango assado",
-    "Ervilha com legumes",
-    "Pão de mel",
-    ""
+    "Arroz/feijão/arroz integral\nCarne assada com molho de mostarda\nOpção: PVT caipira\nCaponata de abobrinha\nSalada de almeirão\nBanana\nMinipão/refresco",
+    "Carne assada com molho de mostarda",
+    "Pvt caipira",
+    "Banana"
   ),
   Example(
     6,
-    "Arroz / feijão preto / arroz integral\nBife de caçarola com molho ferrugem\nOpção: PVT com vagem\nBatata doce corada\nSalada de alface\nBanana\nMinipão / refresco",
-    "Bife de caçarola com molho ferrugem",
-    "Pvt com vagem",
-    "Banana",
-    ""
+    "Arroz/feijão/arroz integral\nLinguiça acebolada\nOpção: Macarrão com molho de shimeji (V)\nRepolho refogado com passas\nSalada de beterraba ralada\nMexerica\nMinipão/refresco",
+    "Linguiça acebolada",
+    "Macarrão com molho de shimeji (v)",
+    "Mexerica"
   ),
   Example(
     7,
-    "Arroz / feijão / arroz integral\nFilé de de peito de frango à pizzaiolo\nOpção: Omelete com alho-poró\nLegumes à juliana\nSalada de agrião\nSagú de maracujá\nMinipão / refresco",
-    "Filé de de peito de frango à pizzaiolo",
-    "Omelete com alho-poró",
-    "Sagú de maracujá",
-    ""
+    "Arroz/feijão /arroz integral\nFilé de frango com molho de laranja\nOpção: Almôndegas de PVT com molho roti\nMandioca na manteiga\nSalada almeirão \nBolinho de baunilha\nMinipão/ Refresco",
+    "Filé de frango com molho de laranja",
+    "Almôndegas de pvt com molho roti",
+    "Bolinho de baunilha"
   ),
-  Example(7, "Fechado", null, null, null, "mudane"),
+  Example(7, "FECHADO", null, null, null),
   Example(
     8,
-    "Arroz / feijão / arroz integral\nFrango xadrez\nOpção: Bolinho de PVT\nAbobrinha com manjericão\nSalada de escarola\nRomeu e julieta\nMinipão / refresco",
-    "Frango xadrez",
-    "Bolinho de pvt",
-    "Romeu e julieta",
-    ""
+    "Em razão do jogo da Seleção Brasileira, funcionará excepcionalmente das 11h15 às 13h.\nArroz/Feijão/ Arroz integral\nBife com molho roti \nOpção:  PVT com tomate e salsa\nMacarrão ao sugo \nSalada de almeirão \nBolinho de chocolate\nMini Pão/ Refresco",
+    "Bife com molho roti",
+    "Pvt com tomate e salsa",
+    "Bolinho de chocolate"
   ),
   Example(
     8,
-    "Arroz / feijão / arroz integral\nLombo com molho de ervas\nOpção: PVT com cogumelos e tomate\nCenoura com vagem\nSalada de pepino\nLaranja\nMinipão / refresco",
-    "Lombo com molho de ervas",
-    "Pvt com cogumelos e tomate",
-    "Laranja",
-    ""
+    "Arroz / Feijão Preto/ Arroz Integral \nCarne em cubos ao molho roty\nOpção: Grão de bico ao vinagrete\nBrócolis e couve flor refogado \nSalada de Beterraba\nCocada branca\nMini pão / Refresco",
+    "Carne em cubos ao molho roty",
+    "Grão de bico ao vinagrete",
+    "Cocada branca"
   ),
   Example(
     9,
-    "Arroz / feijão / arroz integral\nLagarto com molho ferrugem\nOpção: PVT com alho-poró\nCenoura com vagem\nSalada de almeirão\nGelatina de uva \nMinipão / refresco",
-    "Lagarto com molho ferrugem",
-    "Pvt com alho-poró",
-    "Gelatina de uva",
-    ""
+    "Arroz/feijão preto/arroz integral\nPeixe empanado\nOpção: Omelete de forno\nChuchu refogado\nSalada de catalônia\nLaranja\nMinipão/ refresco",
+    "Peixe empanado",
+    "Omelete de forno",
+    "Laranja"
   ),
   Example(
     9,
-    "Arroz / feijão / arroz integral\nLinguiça à escabeche\nOpção: Lasanha de brócolis com ricota\nQuiabo refogado\nSalada de escarola\nBanana \nMinipão / refresco",
-    "Linguiça à escabeche",
-    "Lasanha de brócolis com ricota",
-    "Banana",
-    ""
+    "Arroz/ feijão/ arroz integral\nBife de contrafilé grelhado \nOpção: Almôndegas de Feijão preto \nRepolho com passas \nSalada de tomate com pepino  \nBanana\nMinipão/ refresco",
+    "Bife de contrafilé grelhado",
+    "Almôndegas de feijão preto",
+    "Banana"
   ),
-  Example(
-    11,
-    "Arroz / feijão preto / arroz integral\nCupim assado com molho madeira\nOpção: Hambúrguer de feijão branco\nAbóbora ao forno\nSalada de mix de folhas\nCurau\nMinipão / refresco\n\n**Os Restaurantes Universitários não fornecem copos descartáveis. Tragam suas canecas.**",
-    "Cupim assado com molho madeira",
-    "Hambúrguer de feijão branco",
-    "Curau",
-    ""
-  ),
-  Example(
-    11,
-    "Arroz / feijão / arroz integral\nFilé de coxa de frango com molho de gergelim\nOpção: PVT com gergelim\nBerinjela com uva passas\nSalada de alface\nMamão\nMinipão / refresco\n\n**Os Restaurantes Universitários não fornecem copos descartáveis. Tragam suas canecas.**",
-    "Filé de coxa de frango com molho de gergelim",
-    "Pvt com gergelim",
-    "Mamão",
-    ""
-  ),
+  Example(11, "Fechado para reforma a partir de 27.04.2026.", null, null, null),
   Example(
     12,
-    "Arroz / feijão / arroz integral \nFilé de coxa de frango com molho de ervas\nOpção: Fricassê de PVT\nEscarola refogada\nSalada cenoura\nMaçã\nMinipão / refresco\n\n**Os Restaurantes Universitários não fornecem copos descartáveis. Tragam suas canecas.**",
-    "Filé de coxa de frango com molho de ervas",
-    "Fricassê de pvt",
-    "Maçã",
-    ""
+    "Arroz/feijão/ arroz integral\nPeixe no fubá\nOpção: PVT com mandioca\nCreme de espinafre \nSaladas: Almeirão\nDoce de goiaba industrializado\nMini pão/refresco",
+    "Peixe no fubá",
+    "Pvt com mandioca",
+    "Doce de goiaba industrializado"
   ),
-  Example(12, "FECHADO", null, null, null, "mudane"),
+  Example(12, "FECHADO", null, null, null),
   Example(
     13,
-    "Arroz / arroz integral / feijão carioca\nHambúrguer à pizzaiolo\nOpção: Hambúrguer de PVT à pizzaiolo\nBatata ao forno\nSaladas: Alface / beterraba / feijão fradinho \nMaria mole / banana\nMinipão / refresco\n\n**Os Restaurantes Universitários não fornecem copos descartáveis. Tragam suas canecas.**",
-    "Hambúrguer à pizzaiolo",
-    "Hambúrguer de pvt à pizzaiolo",
-    "Maria mole",
-    ""
+    "Em razão do jogo da Seleção Brasileira, funcionará excepcionalmente das 11h15 às 13h.\nArroz/ Arroz integral/ Feijão carioca\nFilé de coxa de frango acebolado \nOpção:  PVT com ricota \nPurê misto\nSalada: Repolho\nSobremesas:  Laranja\nMini pão/refresco",
+    "Filé de coxa de frango acebolado",
+    "Pvt com ricota",
+    "Laranja"
   ),
   Example(
     13,
-    "Arroz / arroz integral / feijão carioca\nLagarto com molho roti\nOpção: Moussaka vegetariana\nVagem sauté\nSaladas: Catalonha / cenoura cozida / grão-de-bico\nSagu / melão\nMinipão / refresco\n\n**Os Restaurantes Universitários não fornecem copos descartáveis. Tragam suas canecas.**",
-    "Lagarto com molho roti",
-    "Moussaka vegetariana",
-    "Sagu",
-    ""
+    "Arroz/ Arroz integral/ Feijão carioca\nLinguiça com molho barbecue\nOpção:  Feijoada vegetariana \nCouve refogada\nSaladas: Cenoura ralada \nSobremesas: Sagu \nMini pão/refresco",
+    "Linguiça com molho barbecue",
+    "Feijoada vegetariana",
+    "Sagu"
   ),
   Example(
     14,
-    "Arroz / arroz integral / feijão carioca\nHambúrguer a pizzaiolo \nOpção: Hambúrguer de PVT\nBatata corada\nSalada de alface\nGoiabada\nMinipão / refresco\n\n**Os Restaurantes Universitários não fornecem copos descartáveis. Tragam suas canecas.**",
-    "Hambúrguer a pizzaiolo",
+    "Em razão do jogo da Seleção Brasileira, funcionará excepcionalmente das 11h15 às 13h.\nArroz/ Arroz integral/ Feijão carioca\nFilé de coxa de frango acebolado \nOpção:  PVT com ricota \nPurê misto\nSalada: Repolho \nSobremesas: Melão\nMini pão/refresco",
+    "Filé de coxa de frango acebolado",
+    "Pvt com ricota",
+    "Melão"
+  ),
+  Example(
+    14,
+    "Arroz/ Arroz integral/ Feijão carioca\nLinguinça com molho barbecue\nOpção:  Feijoada vegetariana \nCouve refogada\nSaladas:  Cenoura ralada \nSobremesas: Cocada\nMini pão/refresco",
+    "Linguinça com molho barbecue",
+    "Feijoada vegetariana",
+    "Cocada"
+  ),
+  Example(
+    17,
+    "Arroz / feijão / arroz integral\nFrango à moda caipira\nOpção: Bolinho caipira com PVT\nBatata doce com milho\nSalada de alface com cenoura\nPavê de paçoquinha\nMinipão / Refresco",
+    "Frango à moda caipira",
+    "Bolinho caipira com pvt",
+    "Pavê de paçoquinha"
+  ),
+  Example(
+    17,
+    "Arroz / feijão / arroz integral\nBife de alcatra com molho de páprica\nOpção: Hambúrguer de PVT\nBeterraba sauté\nSalada de repolho\nGelatina com maçã\nMinipão / Refresco",
+    "Bife de alcatra com molho de páprica",
     "Hambúrguer de pvt",
-    "Goiabada",
-    ""
-  ),
-  Example(
-    14,
-    "Arroz / arroz integral / feijão carioca\nLagarto com molho roti\nOpção: Moussaka vegetariana\nVagem sauté\nSalada de catalonha\nBanana\nMinipão / refresco\n\n**Os Restaurantes Universitários não fornecem copos descartáveis. Tragam suas canecas.**",
-    "Lagarto com molho roti",
-    "Moussaka vegetariana",
-    "Banana",
-    ""
-  ),
-  Example(
-    17,
-    "Arroz / feijão preto / arroz integral\nSalsicha americana\nOpção: Grão-de-bico com tomate, cebola e salsa\nMacarrão ao alho e óleo\nSalada de alface\nGelatina com maçã\nMinipão / refresco",
-    "Salsicha americana",
-    "Grão-de-bico com tomate, cebola e salsa",
-    "Gelatina com maçã",
-    ""
-  ),
-  Example(
-    17,
-    "Arroz / feijão preto / arroz integral\nPanqueca de carne\nOpção: Panqueca de PVT\nChuchu com milho\nSalada de repolho\nMamão\nMinipão / refresco",
-    "Panqueca de carne",
-    "Panqueca de pvt",
-    "Mamão",
-    ""
+    "Gelatina com maçã"
   ),
   Example(
     19,
-    "Linguiça Assada \nOp veg: PTS Clara à Primavera\nMandioca Ensopada\nAlface\nBerinjela\nMaçã\nArroz / Feijão / Integral \nSuco de Abacaxi\n808 Kcal/ 755 Kcal",
-    "Linguiça assada",
-    "Pts clara à primavera",
-    "Maçã",
-    ""
+    "Carne de Panela (Coxão Duro) \nAlmondega Vegetariana\nChuchu Refogado\nRepolho \nBeterraba Ralada \nMaçã\nArroz / Feijão / Integral\n1110 Kcal/ 1000 Kcal",
+    "Carne de panela (coxão duro)",
+    "Almondega vegetariana",
+    "Maçã"
   ),
   Example(
     19,
-    "Lagarto ao Molho Madeira\nOp veg: Hambúrguer de Soja\nRepolho Refogado\nAgrião com Almeirão \nPepino \nMelão \nArroz / Feijão / Integral \nSuco de Tangerina\n762 Kcal/ 702 Kcal",
-    "Lagarto ao molho madeira",
-    "Hambúrguer de soja",
-    "Melão",
-    ""
+    "Bife Bovino ao Molho Madeira (Coxão Mole) \nHambúrguer Vegetariano\nMandioca Ensopada \nRúcula \nTomate com cebola \nLaranja\nArroz / Feijão / Integral\n1160 Kcal/ 1092 Kcal",
+    "Bife bovino ao molho madeira (coxão mole)",
+    "Hambúrguer vegetariano",
+    "Laranja"
   ),
   Example(
     20,
-    "BOLINHO DE CARNE AO MOLHO BARBECUE\n(musculo),\n152 KCAL\nLASANHA DE BERINJELA\n122KCAL\nCHUCHU REFOGADO\n 19KCAL\nALFACE\n9 kcal\nREPOLHO VERDE\n25 KCAL\nABÓBORA COZIDA\n31 KCAL\nARROZ BRANCO\n138kcal\nARROZ INTEGRAL\n116kcal\nFEIJÃO CARIOCA\n86 kcal\nMINI PÃO FRANCES\n75 kcal\nMELANCIA26 KCAL\nSUCO DE UVA\n48 kcal",
-    "Bolinho de carne ao molho barbecue (musculo)",
-    "Lasanha de berinjela",
-    "Melancia",
-    ""
+    "BIFE GRELHADO\nBOLINHO DE BRÓCOLIS COM RICOTA (CONTÉM LACTOSE E GLÚTEN)\nREPOLHO REFOGADO COM MILHO E ERVILHA \nSALADA DE ALFACE\nSALADA TOMATE\nMOLHO VINAGRETE\nMOLHO TÁRTARO \nARROZ BRANCO\nARROZ INTEGRAL\nFEIJÃO PRETO\nMINI PÃO FRANCÊS \nFARINHA DE MANDIOCA TORRADA FINA \nLARANJA\nSUCO DE MANGA",
+    "Bife grelhado",
+    "Bolinho de brócolis com ricota (contém lactose e glúten)",
+    "Laranja"
   ),
   Example(
     20,
-    "LINGUIÇA CHAPEADA\n143 KCAL\nQUIBE DE ABÓBORA PAULISTA  COM PTS\n177 kcal\nFAROFA DE CEBOLA\n88KCAL\nALFACE\n9 kcal\nPEPINO\n24 kcal\nJILÓ\n27 KCAL\nARROZ BRANCO\n138kcal\nARROZ INTEGRAL\n116kcal\nFEIJÃO CARIOCA\n86 kcal\nMINI PÃO FRANCES\n75 kcal\nMELANCIA\n30 KCAL\nSUCO DE UVA\n48 kcal",
-    "Linguiça chapeada",
-    "Quibe de abóbora paulista  com pts",
-    "Melancia",
-    ""
+    "FILE DE FRANGO A MILANESA (CONTÉM GLÚTEN)\nOVOS MEXIDOS\nBATATA SAUTÉ\nSALADA DE ACELGA\nSALADA DE LENTILHA\nMOLHO VINAGRETE\nMOLHO MOSTARDA       \nARROZ BRANCO\nARROZ INTEGRAL\nFEIJÃO CARIOCA \nMINI PÃO FRANCÊS \nFARINHA DE MANDIOCA TORRADA FINA \nMAÇA\nSUCO DE CAJU",
+    "File de frango a milanesa (contém glúten)",
+    "Ovos mexidos",
+    "Maça"
   ),
   Example(
     23,
-    "Arroz / feijão preto / arroz integral\nSalsicha americana\nOpção: Grão-de-bico com tomate, cebola e salsa\nMacarrão ao alho e óleo\nSalada de alface\nGelatina com maçã\nMinipão / refresco",
-    "Salsicha americana",
-    "Grão-de-bico com tomate, cebola e salsa",
-    "Gelatina com maçã",
-    ""
+    "Arroz / feijão / arroz integral\nFrango à moda caipira\nOpção: Bolinho caipira com PVT\nBatata doce com milho\nSalada de alface com cenoura\nPavê de paçoquinha\nMinipão / Refresco",
+    "Frango à moda caipira",
+    "Bolinho caipira com pvt",
+    "Pavê de paçoquinha"
   ),
-  Example(23, "Fechado", null, null, null, ""),
+  Example(23, "", null, null, null),
 )
 
 private class Example(
