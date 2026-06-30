@@ -65,7 +65,7 @@ val quadrilateroParser = MenuParser {
   if (items.size < 3) return@MenuParser closedMenuParser.parse(it)
   val veg = items.find("Opção").single().cleanString()
   val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
-  val dessert = items.getOrNull(items.lastIndex - 3)?.cleanString()
+  val dessert = items.getOrNull(items.lastIndex - 2)?.cleanString()
   Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
 }
 
@@ -74,7 +74,7 @@ val eachParser = MenuParser {
   if (items.size < 3) return@MenuParser closedMenuParser.parse(it)
   val veg = items.find("Opção:").single()
   val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
-  val dessert = items.getOrNull(items.lastIndex - 4)?.cleanString()
+  val dessert = items.getOrNull(items.lastIndex - 2)?.cleanString()
   Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
 }
 
@@ -83,7 +83,7 @@ val largoSaoFranciscoParser = MenuParser {
   if (items.size < 3) return@MenuParser closedMenuParser.parse(it)
   val veg = items.find("Opção:").single()
   val main = items.getOrNull(items.findIndex(veg) - 1)?.cleanString()
-  val dessert = items.getOrNull(items.lastIndex - 3)?.cleanString()
+  val dessert = items.getOrNull(items.lastIndex - 2)?.cleanString()
   Menu(main, veg, dessert, items.cleanStrings(main, veg, dessert), it)
 }
 
@@ -127,6 +127,7 @@ private fun List<String>.cleanStrings(vararg specialItems: String?) =
 
 private fun String.cleanItems() =
   replace("\n(", " (")
+    .replace(Regex("c/\\s*", IGNORE_CASE), "com ")
     .split("\n", "/")
     .map { it.replace(Regex("[()]*\\d*,*\\.*\\d*\\s*kcal[(())]*", IGNORE_CASE), "") }
     .map { it.trim(',') }
@@ -135,7 +136,7 @@ private fun String.cleanItems() =
 
 
 private fun String.cleanString() =
-  replace("c/", "com", true).substringAfter(":").trim().lowercase().replaceFirstChar { it.titlecase() }
+  substringAfter(":").trim().lowercase().replaceFirstChar { it.titlecase() }
 
 data class Menu(
   val mainItem: String?,
